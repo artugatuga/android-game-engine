@@ -36,7 +36,7 @@ class GameSurface @JvmOverloads constructor(
 
                 // Set up the fixed update timer.
                 timer = Timer()
-                timer!!.scheduleAtFixedRate(FixedUpdateTimer(), 0, (1000 / 30).toLong())
+                timer!!.scheduleAtFixedRate(FixedUpdateTimer(), 0, (1000 / 60).toLong())
             }
 
             override fun surfaceChanged(

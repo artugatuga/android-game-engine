@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupControls() {
         jumpButton = findViewById<View>(R.id.up_button) as Button
         jumpButton!!.setOnClickListener {
-            game!!.player!!.isFlying = true
+            game!!.player!!.ApplyForce()
         }
     }
 
@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
             player = DroppingRectangle(
                 Vector((surface.width / 3).toFloat(), (surface.height / 3).toFloat()),
-                100f, 100f, 0.1f, Color.rgb(128, 14, 80)
+                100f, 100f, 1000f / 60f / 1000f, Color.rgb(128, 14, 80)
             )
 
             surface.addGameObject(circle!!)

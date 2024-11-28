@@ -1,20 +1,29 @@
 package com.innoveworkshop.gametest.engine
 
-class Physics {
-    private val gravity = 9.81f
+import android.util.Log
+import androidx.collection.floatObjectMapOf
+import kotlin.concurrent.fixedRateTimer
 
-    fun Gravity(
-        time: Float = 0f
-    ):Float {
-        val acceleration = time/gravity
-        return gravity + gravity * acceleration
-    }
+class Physics {
+    private val gravity = 9.81f * 20
 
     fun ApplyForce(
-        time: Float = 0f,
-        force: Float = 0f
+        force: Float = 1f,
+        mass: Float = 1f,
     ):Float {
-        val acceleration = force/time
-        return acceleration
+        val gravityForce = mass * gravity
+        Log.d("ACCELARATION", gravityForce.toString())
+        val finalForce = gravityForce - force
+        val accelaration = finalForce/mass
+        return accelaration
+    }
+
+    fun ChnageY(
+        initialYPosition: Float,
+        initialVelocity: Float,
+        time: Float
+    ): Float{
+        val tempY = initialYPosition + (initialVelocity * time) + (gravity)*(time*time)
+        return tempY
     }
 }

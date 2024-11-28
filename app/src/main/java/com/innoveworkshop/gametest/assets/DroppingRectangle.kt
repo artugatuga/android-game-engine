@@ -15,30 +15,41 @@ class DroppingRectangle(
     color: Int
 ) : Rectangle(position, width, height, color) {
     var deltaTime: Float = deltaT
-    var time: Float = 0f
-    var isFlying = false
+    var time = 0f
+    var mass = 2f
+    var initialYPosition = 0f
+    var initialVelocity = 0f
+
+    init {
+        if (position != null) {
+            initialYPosition = position.y
+        }
+    }
 
     override fun onFixedUpdate() {
         super.onFixedUpdate()
 
-        if (!isFlying) {
+        if (!isFloored) {
+            position.y = Physics().ChnageY(
+                initialYPosition,
+                initialVelocity,
+                time
+            )
             time += deltaTime
-            position.y += Physics().Gravity(time)
+            Log.d("TIME", time.toString())
+
         }else{
-            ApplyForce()
+            time = 0f
         }
     }
 
     fun ApplyForce(
-        force: Float = 10f
+        force: Float = 1200f
     ){
-        var tempForce = Physics().ApplyForce(time, force)
+        initialYPosition = position.y
+        time = 0f
+        val tempForce = Physics().ApplyForce(force, mass)
 
-        if(tempForce < 0){
-            isFlying = false
-            return
-        }
-
-        position.y -= Physics().ApplyForce(time, force)
+        initialVelocity = tempForce
     }
 }
