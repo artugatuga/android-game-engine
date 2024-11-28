@@ -11,13 +11,11 @@ import com.innoveworkshop.gametest.engine.GameObject
 import com.innoveworkshop.gametest.engine.GameSurface
 import com.innoveworkshop.gametest.engine.Rectangle
 import com.innoveworkshop.gametest.engine.Vector
+import com.innoveworkshop.gametest.engine.Physics
 
 class MainActivity : AppCompatActivity() {
     protected var gameSurface: GameSurface? = null
-    protected var upButton: Button? = null
-    protected var downButton: Button? = null
-    protected var leftButton: Button? = null
-    protected var rightButton: Button? = null
+    protected var jumpButton: Button? = null
 
     protected var game: Game? = null
 
@@ -33,21 +31,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupControls() {
-        upButton = findViewById<View>(R.id.up_button) as Button
-        upButton!!.setOnClickListener { game!!.circle!!.position.y -= 10f }
-
-        downButton = findViewById<View>(R.id.down_button) as Button
-        downButton!!.setOnClickListener { game!!.circle!!.position.y += 10f }
-
-        leftButton = findViewById<View>(R.id.left_button) as Button
-        leftButton!!.setOnClickListener { game!!.circle!!.position.x -= 10f }
-
-        rightButton = findViewById<View>(R.id.right_button) as Button
-        rightButton!!.setOnClickListener { game!!.circle!!.position.x += 10f }
+        jumpButton = findViewById<View>(R.id.up_button) as Button
+        jumpButton!!.setOnClickListener {
+            game!!.player!!.isFlying = true
+        }
     }
 
     inner class Game : GameObject() {
         var circle: Circle? = null
+        var player: DroppingRectangle? = null
 
         override fun onStart(surface: GameSurface?) {
             super.onStart(surface)
@@ -58,28 +50,22 @@ class MainActivity : AppCompatActivity() {
                 100f,
                 Color.RED
             )
+
+            player = DroppingRectangle(
+                Vector((surface.width / 3).toFloat(), (surface.height / 3).toFloat()),
+                100f, 100f, 0.1f, Color.rgb(128, 14, 80)
+            )
+
             surface.addGameObject(circle!!)
 
-            surface.addGameObject(
-                Rectangle(
-                    Vector((surface.width / 3).toFloat(), (surface.height / 3).toFloat()),
-                    200f, 100f, Color.GREEN
-                )
-            )
-
-            surface.addGameObject(
-                DroppingRectangle(
-                    Vector((surface.width / 3).toFloat(), (surface.height / 3).toFloat()),
-                    100f, 100f, 10f, Color.rgb(128, 14, 80)
-                )
-            )
+            surface.addGameObject(player!!)
         }
 
         override fun onFixedUpdate() {
             super.onFixedUpdate()
 
             if (!circle!!.isFloored && !circle!!.hitRightWall() && !circle!!.isDestroyed) {
-                circle!!.setPosition(circle!!.position.x + 1, circle!!.position.y + 1)
+                //circle!!.setPosition(circle!!.position.x + 1, circle!!.position.y + 1)
             } else {
                 circle!!.destroy()
             }
