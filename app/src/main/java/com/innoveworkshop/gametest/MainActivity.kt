@@ -16,6 +16,8 @@ import com.innoveworkshop.gametest.engine.Physics
 class MainActivity : AppCompatActivity() {
     protected var gameSurface: GameSurface? = null
     protected var jumpButton: Button? = null
+    protected var leftButton: Button? = null
+    protected var rightButton: Button? = null
 
     protected var game: Game? = null
 
@@ -32,43 +34,39 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupControls() {
         jumpButton = findViewById<View>(R.id.up_button) as Button
+        leftButton = findViewById<View>(R.id.left_button) as Button
+        rightButton = findViewById<View>(R.id.right_button) as Button
+
         jumpButton!!.setOnClickListener {
-            game!!.player!!.ApplyForce()
+            game!!.player!!.ApplyForce(
+                Vector(0f, 1200f)
+            )
+        }
+
+        leftButton!!.setOnClickListener {
+            game!!.player!!.ApplyForce(
+                Vector(500f, 0f)
+            )
+        }
+
+        rightButton!!.setOnClickListener {
+            game!!.player!!.ApplyForce(
+                Vector(-500f, 0f)
+            )
         }
     }
 
     inner class Game : GameObject() {
-        var circle: Circle? = null
         var player: DroppingRectangle? = null
 
         override fun onStart(surface: GameSurface?) {
             super.onStart(surface)
-
-            circle = Circle(
-                (surface!!.width / 2).toFloat(),
-                (surface.height / 2).toFloat(),
-                100f,
-                Color.RED
-            )
-
             player = DroppingRectangle(
-                Vector((surface.width / 3).toFloat(), (surface.height / 3).toFloat()),
+                Vector((surface!!.width / 2).toFloat(), (surface.height / 2).toFloat()),
                 100f, 100f, 1000f / 60f / 1000f, Color.rgb(128, 14, 80)
             )
 
-            surface.addGameObject(circle!!)
-
             surface.addGameObject(player!!)
-        }
-
-        override fun onFixedUpdate() {
-            super.onFixedUpdate()
-
-            if (!circle!!.isFloored && !circle!!.hitRightWall() && !circle!!.isDestroyed) {
-                //circle!!.setPosition(circle!!.position.x + 1, circle!!.position.y + 1)
-            } else {
-                circle!!.destroy()
-            }
         }
     }
 }

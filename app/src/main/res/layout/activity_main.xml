@@ -29,11 +29,34 @@
 
         <Button
             android:id="@+id/up_button"
-            android:layout_width="412dp"
-            android:layout_height="205dp"
+            android:layout_width="100dp"
+            android:layout_height="90dp"
             android:text="Jump"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.100000024" />
+
+        <Button
+            android:id="@+id/left_button"
+            android:layout_width="100dp"
+            android:layout_height="90dp"
+            android:text="Left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/right_button"
+            android:layout_width="100dp"
+            android:layout_height="90dp"
+            android:text="Right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

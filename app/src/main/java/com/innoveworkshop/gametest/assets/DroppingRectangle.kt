@@ -6,6 +6,7 @@ import android.view.Gravity
 import com.innoveworkshop.gametest.engine.Rectangle
 import com.innoveworkshop.gametest.engine.Vector
 import com.innoveworkshop.gametest.engine.Physics
+import com.innoveworkshop.gametest.engine.PhysicsBody
 
 class DroppingRectangle(
     position: Vector?,
@@ -16,13 +17,19 @@ class DroppingRectangle(
 ) : Rectangle(position, width, height, color) {
     var deltaTime: Float = deltaT
     var time = 0f
-    var mass = 2f
-    var initialYPosition = 0f
-    var initialVelocity = 0f
+
+    var physicsBody: PhysicsBody? = null
 
     init {
         if (position != null) {
-            initialYPosition = position.y
+            physicsBody = PhysicsBody(
+                mass = 2f,
+                gravity = 2f,
+                initialPosition = position,
+                initialVelocity = Vector(0f, 0f),
+                currentPosition = position,
+                currentVelocity = Vector(0f, 0f)
+            )
         }
     }
 
@@ -30,26 +37,28 @@ class DroppingRectangle(
         super.onFixedUpdate()
 
         if (!isFloored) {
-            position.y = Physics().ChnageY(
-                initialYPosition,
-                initialVelocity,
-                time
+            physicsBody = Physics().UpdatePhysicsBody(
+                physicsBody = physicsBody!!,
+                time = time
             )
+            position = physicsBody!!.currentPosition
             time += deltaTime
-            Log.d("TIME", time.toString())
-
         }else{
             time = 0f
         }
     }
 
     fun ApplyForce(
-        force: Float = 1200f
+        force: Vector
     ){
-        initialYPosition = position.y
-        time = 0f
-        val tempForce = Physics().ApplyForce(force, mass)
+        physicsBody!!.initialPosition = position
 
-        initialVelocity = tempForce
+        time = 0f
+        val tempForce = Physics().ApplyForce(
+            force = force,
+            physicsBody = physicsBody!!
+        )
+
+        physicsBody!!.initialVelocity = tempForce
     }
 }
