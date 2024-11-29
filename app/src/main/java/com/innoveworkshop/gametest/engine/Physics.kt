@@ -1,6 +1,7 @@
 package com.innoveworkshop.gametest.engine
 
 import android.util.Log
+import kotlinx.coroutines.DEBUG_PROPERTY_NAME
 
 class PhysicsBody(
     @JvmField var mass: Float,
@@ -9,6 +10,8 @@ class PhysicsBody(
     @JvmField var initialVelocity: Vector,
     @JvmField var currentPosition: Vector,
     @JvmField var currentVelocity: Vector,
+    @JvmField var lifeTime: Float = 0f,
+    @JvmField var maxLifeTime: Int = 0,
 )
 
 class Physics {
@@ -29,7 +32,7 @@ class Physics {
         )
 
         val finalForce = Vector(
-            0 - force.x,
+            0f - force.x,
             gravityForce.y - force.y
         )
 
@@ -48,9 +51,6 @@ class Physics {
             acceleration.y += physicsBody.initialVelocity.y
         }
 
-        Log.d("CURRENT VELOCITY X",  acceleration.x.toString())
-        Log.d("CURRENT VELOCITY Y",  acceleration.y.toString())
-
         return acceleration
     }
 
@@ -68,11 +68,6 @@ class Physics {
         physicsBody.currentPosition = Vector(
             physicsBody.initialPosition.x + physicsBody.currentVelocity.x * (time * time),
             physicsBody.initialPosition.y + physicsBody.currentVelocity.y + (objectGravity) * (time * time)
-        )
-
-        physicsBody.initialVelocity = Vector(
-            physicsBody.initialVelocity.x ,
-            physicsBody.initialVelocity.y
         )
 
         return physicsBody

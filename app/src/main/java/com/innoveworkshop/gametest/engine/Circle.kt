@@ -3,7 +3,12 @@ package com.innoveworkshop.gametest.engine
 import android.graphics.Canvas
 import android.graphics.Paint
 
-class Circle(x: Float, y: Float, var radius: Float, color: Int) : GameObject(x, y), Caged {
+open class Circle(
+    position: Vector?,
+    var radius: Float,
+    color: Int
+) : GameObject(position!!), Caged {
+
     // Set up the paint.
     var paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 

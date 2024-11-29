@@ -1,21 +1,18 @@
 package com.innoveworkshop.gametest.assets
 
-import android.os.Debug
-import android.util.Log
-import android.view.Gravity
-import com.innoveworkshop.gametest.engine.Rectangle
+import com.innoveworkshop.gametest.engine.Circle
 import com.innoveworkshop.gametest.engine.Vector
 import com.innoveworkshop.gametest.engine.Physics
 import com.innoveworkshop.gametest.engine.PhysicsBody
 
-class DroppingRectangle(
+class Projectile(
     position: Vector?,
-    width: Float,
-    height: Float,
-    deltaT: Float,
+    radius: Float,
+    dt: Float,
     color: Int
-) : Rectangle(position, width, height, color) {
-    var deltaTime: Float = deltaT
+) : Circle (position, radius, color) {
+
+    val deltaTime: Float = dt
     var time = 0f
 
     var physicsBody: PhysicsBody? = null
@@ -24,11 +21,12 @@ class DroppingRectangle(
         if (position != null) {
             physicsBody = PhysicsBody(
                 mass = 2f,
-                gravity = 2f,
+                gravity = 0f,
                 initialPosition = position,
                 initialVelocity = Vector(0f, 0f),
                 currentPosition = position,
-                currentVelocity = Vector(0f, 0f)
+                currentVelocity = Vector(0f, 0f),
+                maxLifeTime = 5
             )
         }
     }
@@ -36,19 +34,24 @@ class DroppingRectangle(
     override fun onFixedUpdate() {
         super.onFixedUpdate()
 
-        if (!isFloored) {
+        if(!isDestroyed){
+            physicsBody!!.lifeTime += deltaTime
+            time = physicsBody!!.lifeTime
+
             physicsBody = Physics().UpdatePhysicsBody(
                 physicsBody = physicsBody!!,
                 time = time
             )
+
             position = physicsBody!!.currentPosition
-            time += deltaTime
-        }else{
-            time = 0f
+
+            if(physicsBody!!.maxLifeTime <= physicsBody!!.lifeTime){
+                gameSurface!!.removeGameObject(this)
+            }
         }
     }
 
-    fun ApplyForce(
+    fun ApplyForceToProjectile(
         force: Vector
     ){
         physicsBody!!.initialPosition = position

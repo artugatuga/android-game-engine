@@ -3,10 +3,13 @@ package com.innoveworkshop.gametest.engine
 import android.graphics.Canvas
 import android.graphics.Paint
 
-open class Rectangle(position: Vector?, var width: Float, var height: Float, color: Int) :
-    GameObject(
-        position!!
-    ), Caged {
+open class Rectangle(
+    position: Vector?,
+    var width: Float,
+    var height: Float,
+    color: Int
+) : GameObject(position!!), Caged {
+
     // Set up the paint.
     var paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
