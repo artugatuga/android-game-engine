@@ -9,12 +9,10 @@ class Player(
     position: Vector?,
     width: Float,
     height: Float,
-    deltaT: Float,
     color: Int
 ) : Rectangle (position, width, height, color) {
 
-    var deltaTime: Float = deltaT
-    var time = 0f
+    var timeFromForceApplied = 0f
 
     var physicsBody: PhysicsBody? = null
 
@@ -36,15 +34,15 @@ class Player(
 
         if (!isFloored) {
             physicsBody!!.lifeTime += deltaTime
-            time = physicsBody!!.lifeTime
+            timeFromForceApplied += deltaTime
 
             physicsBody = Physics().UpdatePhysicsBody(
                 physicsBody = physicsBody!!,
-                time = time
+                time = timeFromForceApplied
             )
             position = physicsBody!!.currentPosition
         }else{
-            time = 0f
+            timeFromForceApplied = 0f
         }
     }
 
@@ -53,7 +51,7 @@ class Player(
     ){
         physicsBody!!.initialPosition = position
 
-        time = 0f
+        timeFromForceApplied = 0f
         val tempForce = Physics().ApplyForce(
             force = force,
             physicsBody = physicsBody!!

@@ -1,5 +1,7 @@
 package com.innoveworkshop.gametest.assets
 
+import android.util.Log
+import com.innoveworkshop.gametest.MainActivity
 import com.innoveworkshop.gametest.engine.Circle
 import com.innoveworkshop.gametest.engine.Vector
 import com.innoveworkshop.gametest.engine.Physics
@@ -8,13 +10,10 @@ import com.innoveworkshop.gametest.engine.PhysicsBody
 class Projectile(
     position: Vector?,
     radius: Float,
-    dt: Float,
-    color: Int
+    color: Int,
+    val id: Int
 ) : Circle (position, radius, color) {
-
-    val deltaTime: Float = dt
     var time = 0f
-
     var physicsBody: PhysicsBody? = null
 
     init {
@@ -36,7 +35,7 @@ class Projectile(
 
         if(!isDestroyed){
             physicsBody!!.lifeTime += deltaTime
-            time = physicsBody!!.lifeTime
+            time += deltaTime
 
             physicsBody = Physics().UpdatePhysicsBody(
                 physicsBody = physicsBody!!,
@@ -46,7 +45,7 @@ class Projectile(
             position = physicsBody!!.currentPosition
 
             if(physicsBody!!.maxLifeTime <= physicsBody!!.lifeTime){
-                gameSurface!!.removeGameObject(this)
+                MainActivity().DeleteProjectile(id)
             }
         }
     }

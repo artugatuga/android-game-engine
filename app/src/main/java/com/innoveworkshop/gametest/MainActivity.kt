@@ -1,14 +1,16 @@
 package com.innoveworkshop.gametest
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.innoveworkshop.gametest.assets.Player
 import com.innoveworkshop.gametest.assets.Projectile
-import com.innoveworkshop.gametest.engine.Circle
 import com.innoveworkshop.gametest.engine.GameObject
 import com.innoveworkshop.gametest.engine.GameSurface
 import com.innoveworkshop.gametest.engine.Vector
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     protected var game: Game? = null
 
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -30,20 +33,30 @@ class MainActivity : AppCompatActivity() {
         setupControls()
     }
 
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     private fun setupControls() {
         shoot = findViewById<View>(R.id.shoot_button) as Button
 
         shoot!!.setOnClickListener {
-            game!!.projectiles!![game!!.projectiles!!.lastIndex] = CreateProjectile()
+            var i = 0
+
+            while (i < game!!.projectiles.size){
+                if(game!!.projectiles[i] == null){
+                    game!!.projectiles[i] = CreateProjectile(i)
+                    break
+                }else{
+                    i++
+                }
+            }
         }
     }
 
-    fun CreateProjectile(): Projectile{
+    fun CreateProjectile(id: Int): Projectile{
         val projectile = Projectile(
             game!!.player!!.position,
             10f,
-            1000f / 60f / 1000f,
-            Color.rgb(128, 14, 80)
+            Color.rgb(128, 14, 80),
+            id
         )
         gameSurface!!.addGameObject(projectile)
         projectile.ApplyForceToProjectile(
@@ -64,18 +77,36 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    inner class Game : GameObject() {
+    fun DeleteProjectile(int: Int){
+        Log.d("ERROR", "NOT HERE")
+        val projectile = game!!.projectiles[int]
+        Log.d("ERROR", "NOT HERE ALSO")
+        if(projectile != null){
+            Log.d("ERROR", "NOPE")
+            game!!.projectiles[int] = null
+            Log.d("ERROR", "NAH AHN")
+            gameSurface!!.removeGameObject(projectile)
+            Log.d("ERROR", "NICLES BATATOIDES")
+            projectile.isDestroyed = true
+            Log.d("ERROR", "SO PODE SER AQUI")
+        }
+    }
+
+    class Game : GameObject() {
         var player: Player? = null
-        public var projectiles: MutableList<GameObject>? = null
+        var projectiles = MutableList<GameObject?>(50) { null }
 
         override fun onStart(surface: GameSurface?) {
             super.onStart(surface)
             player = Player(
                 Vector((surface!!.width / 4).toFloat(), (surface.height / 2).toFloat()),
-                100f, 100f, 1000f / 60f / 1000f, Color.rgb(128, 14, 80)
+                100f, 100f, Color.rgb(128, 14, 80)
             )
-
             surface.addGameObject(player!!)
+        }
+
+        fun DeleteProjectile(int: Int){
+            MainActivity().DeleteProjectile(int)
         }
     }
 }

@@ -4,10 +4,11 @@ import android.graphics.Canvas
 
 abstract class GameObject {
     var position: Vector
+    protected var deltaTime = 1000/60/1000f
+    protected var lifeTime = 0f
 
     protected var gameSurface: GameSurface? = null
     var isDestroyed: Boolean = false
-        protected set
 
     constructor(position: Vector) {
         this.position = position
@@ -33,6 +34,8 @@ abstract class GameObject {
     }
 
     open fun onFixedUpdate() {
+        lifeTime += deltaTime
+
         if (isDestroyed) {
             setPosition(-100f, -100f)
         }
