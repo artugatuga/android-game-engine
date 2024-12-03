@@ -1,11 +1,12 @@
 package com.innoveworkshop.gametest.engine
 
 import android.util.Log
-import kotlinx.coroutines.DEBUG_PROPERTY_NAME
+import androidx.compose.runtime.currentComposer
 
 class PhysicsBody(
     @JvmField var mass: Float,
     @JvmField var gravity: Float,
+    @JvmField var airResistence: Float,
     @JvmField var initialPosition: Vector,
     @JvmField var initialVelocity: Vector,
     @JvmField var currentPosition: Vector,
@@ -59,16 +60,26 @@ class Physics {
         time: Float
     ):PhysicsBody {
         val objectGravity = defaultGravity * physicsBody.gravity
+        var objectAirResistence = physicsBody.airResistence
+
+        if (physicsBody.initialVelocity.x > 0f){
+            objectAirResistence *= -1
+        }
 
         physicsBody.currentVelocity = Vector(
-            physicsBody.initialVelocity.x / time,
-            physicsBody.initialVelocity.y * time
+            physicsBody.initialVelocity.x + (objectAirResistence * time),
+            physicsBody.initialVelocity.y + (objectGravity * time)
         )
 
         physicsBody.currentPosition = Vector(
-            physicsBody.initialPosition.x + physicsBody.currentVelocity.x * (time * time),
-            physicsBody.initialPosition.y + physicsBody.currentVelocity.y + (objectGravity) * (time * time)
+            physicsBody.initialPosition.x + (physicsBody.initialVelocity.x * time) + (objectAirResistence/2) * (time * time),
+            physicsBody.initialPosition.y + (physicsBody.initialVelocity.y * time) + (objectGravity) * (time * time)
         )
+
+        Log.d("INSTANTANEOUS TIME", time.toString())
+        Log.d("INSTANTANEOUS GRAVITY", objectGravity.toString())
+        Log.d("INSTANTANEOUS INITIAL VELOCITY", physicsBody.initialVelocity.y.toString())
+        Log.d("INSTANTANEOUS VELOCITY", physicsBody.currentVelocity.y.toString())
 
         return physicsBody
     }

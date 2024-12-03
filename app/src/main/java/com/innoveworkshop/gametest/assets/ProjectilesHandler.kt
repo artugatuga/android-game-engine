@@ -1,77 +1,44 @@
 package com.innoveworkshop.gametest.assets
 
 import android.graphics.Color
-import android.icu.text.Transliterator.Position
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import com.innoveworkshop.gametest.MainActivity
 import com.innoveworkshop.gametest.engine.GameObject
 import com.innoveworkshop.gametest.engine.GameSurface
 import com.innoveworkshop.gametest.engine.Vector
 
-data class BasicInfo(
-    val position: Vector,
-)
-
+@RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 class ProjectilesHandler {
-    class Handler : GameObject(){
-        var projectiles = MutableList<GameObject?>(50){null}
-        var create = mutableStateOf(false)
-        var projectile = mutableStateOf(BasicInfo(Vector(0f,0f)))
+    var InitialPos = mutableStateOf(Vector(0f,0f))
+    var list = mutableListOf<GameObject?>()
+
+    init {
+        var i = 0
+        while (i < 50){
+            list.addFirst(null)
+            i++
+        }
+    }
+
+    inner class Handler : GameObject() {
+        var projectiles = list
 
         override fun onFixedUpdate() {
             super.onFixedUpdate()
-
-            if (create.value){
-                var i = 0
-
-                while (i < projectiles.size){
-                    if(projectiles[i] == null){
-                        projectiles[i] = CreateProjectile(i, projectile.value)
-                        break
-                    }else{
-                        i++
-                    }
-                }
-
-                create.value = false
-            }
+            projectiles = list
         }
 
-        fun CreateProjectile(id: Int, info: BasicInfo): Projectile{
+        fun CreateProjectile(surface: GameSurface){
             val projectile = Projectile(
-                info.position,
+                InitialPos.value,
                 10f,
-                Color.rgb(128, 14, 80),
-                id
+                Color.rgb(128, 14, 80)
             )
-            gameSurface!!.addGameObject(projectile)
+            surface.addGameObject(projectile)
             projectile.ApplyForceToProjectile(
-                Vector(-200f, 0f)
+                Vector(-1000f, 1200f)
             )
-
-            return projectile
-        }
-
-        fun DeleteProjectile(id: Int, surface: GameSurface){
-            Log.d("ERROR", "NOT HERE")
-            val projectile = projectiles[id]
-            Log.d("ERROR", "NOT HERE ALSO")
-            if(projectile != null){
-                Log.d("ERROR", "NOPE")
-                projectiles[id] = null
-                Log.d("ERROR", "NAH AHN")
-                surface.removeGameObject(projectile)
-                Log.d("ERROR", "NICLES BATATOIDES")
-                projectile.isDestroyed = true
-                Log.d("ERROR", "SO PODE SER AQUI")
-            }
         }
     }
 }

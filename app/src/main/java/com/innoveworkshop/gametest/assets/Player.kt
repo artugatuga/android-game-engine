@@ -21,6 +21,7 @@ class Player(
             physicsBody = PhysicsBody(
                 mass = 2f,
                 gravity = 2f,
+                airResistence = 0f,
                 initialPosition = position,
                 initialVelocity = Vector(0f, 0f),
                 currentPosition = position,
