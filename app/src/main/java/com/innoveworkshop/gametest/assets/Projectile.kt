@@ -45,7 +45,7 @@ class Projectile(
             position = physicsBody!!.currentPosition
 
             if(physicsBody!!.maxLifeTime <= physicsBody!!.lifeTime){
-                MainActivity().DeleteProjectile(id)
+                ProjectilesHandler.Handler().DeleteProjectile(id, gameSurface!!)
             }
         }
     }
