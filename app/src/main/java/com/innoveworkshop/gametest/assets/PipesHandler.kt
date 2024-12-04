@@ -5,18 +5,49 @@ import androidx.compose.runtime.traceEventEnd
 import com.innoveworkshop.gametest.engine.GameObject
 import com.innoveworkshop.gametest.engine.GameSurface
 import com.innoveworkshop.gametest.engine.Vector
+import kotlin.random.Random
 
 class PipesHandler {
-    inner class Handler : GameObject() {
-        fun CreatePipe(surface: GameSurface){
-            val pipe = Pipe(
-                Vector(surface.width.toFloat(), 100f ),
+    inner class Handler {
+        val pipesInGame = true
+        var timeToSpawnAnother = 3f
+
+        fun onFixedUpdate(surface: GameSurface, time: Float, dt: Float) : Float{
+            var currentTime = time
+            if (pipesInGame && currentTime <= 0){
+                PipesHandler().Handler().CreatePipes(surface)
+                currentTime = timeToSpawnAnother
+            }
+            currentTime -= dt
+            return currentTime
+        }
+
+        fun CreatePipes(surface: GameSurface){
+            val spaceBetween = 500f
+            val upPipeHeight = (700..(surface.height.toFloat() - 700).toInt()).random().toFloat()
+            val downPipeHeight = surface.height.toFloat() - spaceBetween - upPipeHeight
+
+            val upPipe = Pipe(
+                Vector(surface.width.toFloat(), upPipeHeight/2),
                 100f,
-                1000f,
+                upPipeHeight,
                 Color.rgb(255, 255, 255)
             )
-            surface.addGameObject(pipe)
-            pipe.ApplyForceToPipe(
+
+            val downPipe = Pipe(
+                Vector(surface.width.toFloat(), surface.height.toFloat() - downPipeHeight/2),
+                100f,
+                downPipeHeight,
+                Color.rgb(255, 255, 255)
+            )
+
+            surface.addGameObject(upPipe)
+            surface.addGameObject(downPipe)
+
+            upPipe.ApplyForceToPipe(
+                Vector(500f, 0f)
+            )
+            downPipe.ApplyForceToPipe(
                 Vector(500f, 0f)
             )
         }

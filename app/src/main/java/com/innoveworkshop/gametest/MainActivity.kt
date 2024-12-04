@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
 
     inner class Game : GameObject() {
         var player: Player? = null
+        var time: Float = 3f
 
         override fun onStart(surface: GameSurface?) {
             super.onStart(surface)
@@ -68,17 +69,9 @@ class MainActivity : AppCompatActivity() {
             surface.addGameObject(player!!)
         }
 
-        val pipesInGame = true
-        var timeToSpawnAnother = 2f
-        var timeToPassed: Float? = 2f
-
         override fun onFixedUpdate() {
             super.onFixedUpdate()
-            if (pipesInGame && timeToPassed!! <= 0){
-                PipesHandler().Handler().CreatePipe(gameSurface!!)
-                timeToPassed = timeToSpawnAnother
-            }
-            timeToPassed = timeToPassed!! - deltaTime
+            time = PipesHandler().Handler().onFixedUpdate(gameSurface!!, time, deltaTime)
         }
     }
 }

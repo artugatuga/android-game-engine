@@ -59,36 +59,4 @@ class Pipe(
 
         physicsBody!!.initialVelocity = tempForce
     }
-
-    fun Obstables(surface: GameSurface?, ListOfObstacles: MutableList<Circle?>):MutableList<Circle?>{
-        var line = 1
-        val maxLines = 4
-        var balls = 0
-        var ballsInLine = 0
-        val initialY = surface!!.height.toFloat()*(3/4)
-        val surfaceWidth = surface.width.toFloat()
-        val d = 100f
-
-        while (line < maxLines) {
-            while (ballsInLine < line) {
-                val ballY = initialY + (sqrt((d * d) - ((d / 2) * (d / 2))) * line)
-                val ballX = (surfaceWidth - ((line - balls) * d))/2
-
-                ListOfObstacles[balls] = Circle(
-                    ballX,
-                    ballY,
-                    30f,
-                    Color.BLUE,
-                    Vector(0f, 0f)
-                )
-
-                surface.addGameObject(ListOfObstacles[balls]!!)
-                balls++
-                ballsInLine++
-            }
-            ballsInLine = 0
-            line++
-        }
-        return ListOfObstacles
-    }
 }

@@ -20,7 +20,7 @@ class Player(
         if (position != null) {
             physicsBody = PhysicsBody(
                 mass = 2f,
-                gravity = 2f,
+                gravity = 3f,
                 airResistence = 0f,
                 initialPosition = position,
                 initialVelocity = Vector(0f, 0f),
