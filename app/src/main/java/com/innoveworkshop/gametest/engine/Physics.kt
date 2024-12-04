@@ -76,11 +76,6 @@ class Physics {
             physicsBody.initialPosition.y + (physicsBody.initialVelocity.y * time) + (objectGravity) * (time * time)
         )
 
-        Log.d("INSTANTANEOUS TIME", time.toString())
-        Log.d("INSTANTANEOUS GRAVITY", objectGravity.toString())
-        Log.d("INSTANTANEOUS INITIAL VELOCITY", physicsBody.initialVelocity.y.toString())
-        Log.d("INSTANTANEOUS VELOCITY", physicsBody.currentVelocity.y.toString())
-
         return physicsBody
     }
 }

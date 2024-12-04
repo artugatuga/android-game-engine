@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import com.innoveworkshop.gametest.assets.PipesHandler
 import com.innoveworkshop.gametest.assets.Player
 import com.innoveworkshop.gametest.engine.GameObject
 import com.innoveworkshop.gametest.engine.GameSurface
@@ -57,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 
     inner class Game : GameObject() {
         var player: Player? = null
-        var list = MutableList<GameObject?>(2) { null }
 
         override fun onStart(surface: GameSurface?) {
             super.onStart(surface)
@@ -65,8 +65,20 @@ class MainActivity : AppCompatActivity() {
                 Vector((surface!!.width / 4).toFloat(), (surface.height / 2).toFloat()),
                 100f, 100f, Color.rgb(128, 14, 80)
             )
-            list[0] = player
-            surface.addGameObject(list[0]!!)
+            surface.addGameObject(player!!)
+        }
+
+        val pipesInGame = true
+        var timeToSpawnAnother = 2f
+        var timeToPassed: Float? = 2f
+
+        override fun onFixedUpdate() {
+            super.onFixedUpdate()
+            if (pipesInGame && timeToPassed!! <= 0){
+                PipesHandler().Handler().CreatePipe(gameSurface!!)
+                timeToPassed = timeToSpawnAnother
+            }
+            timeToPassed = timeToPassed!! - deltaTime
         }
     }
 }

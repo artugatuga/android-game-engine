@@ -43,7 +43,7 @@ class Projectile(
             position = physicsBody!!.currentPosition
 
             if(physicsBody!!.maxLifeTime <= physicsBody!!.lifeTime){
-                //isDestroyed = true
+                isDestroyed = true
             }
         }
     }

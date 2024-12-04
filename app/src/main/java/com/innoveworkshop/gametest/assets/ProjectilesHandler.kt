@@ -11,24 +11,8 @@ import com.innoveworkshop.gametest.engine.Vector
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 class ProjectilesHandler {
     var InitialPos = mutableStateOf(Vector(0f,0f))
-    var list = mutableListOf<GameObject?>()
-
-    init {
-        var i = 0
-        while (i < 50){
-            list.addFirst(null)
-            i++
-        }
-    }
 
     inner class Handler : GameObject() {
-        var projectiles = list
-
-        override fun onFixedUpdate() {
-            super.onFixedUpdate()
-            projectiles = list
-        }
-
         fun CreateProjectile(surface: GameSurface){
             val projectile = Projectile(
                 InitialPos.value,
