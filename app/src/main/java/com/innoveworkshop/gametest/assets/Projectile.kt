@@ -12,7 +12,6 @@ class Projectile(
     color: Int,
     val surface: GameSurface
 ) : Circle (position, radius, color) {
-    var physicsBody: PhysicsBody? = null
 
     override fun onStart(surface: GameSurface?) {
         super.onStart(surface)
@@ -27,7 +26,8 @@ class Projectile(
             currentPosition = Vector(0f, 0f),
             currentVelocity = Vector(0f, 0f),
             maxLifeTime = 3,
-            surface = this.surface
+            surface = this.surface,
+            objectTypeCir = this
         )
     }
 

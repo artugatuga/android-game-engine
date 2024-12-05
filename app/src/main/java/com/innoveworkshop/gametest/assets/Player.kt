@@ -13,7 +13,6 @@ class Player(
     color: Int,
     val surface: GameSurface
 ) : Rectangle (position, width, height, color) {
-    var physicsBody: PhysicsBody? = null
 
     override fun onStart(surface: GameSurface?) {
         super.onStart(surface)
@@ -27,7 +26,8 @@ class Player(
             initialVelocity = Vector(0f, 0f),
             currentPosition = position,
             currentVelocity = Vector(0f, 0f),
-            surface = this.surface
+            surface = this.surface,
+            objectTypeRec = this
         )
     }
 

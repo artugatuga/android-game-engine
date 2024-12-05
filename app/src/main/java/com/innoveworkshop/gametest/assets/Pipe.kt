@@ -13,7 +13,6 @@ class Pipe(
     color: Int,
     val surface: GameSurface
 ) : Rectangle (position, width, height, color) {
-    var physicsBody: PhysicsBody? = null
 
     override fun onStart(surface: GameSurface?) {
         super.onStart(surface)
@@ -28,7 +27,8 @@ class Pipe(
             currentPosition = position,
             currentVelocity = Vector(0f, 0f),
             maxLifeTime = 5,
-            surface = this.surface
+            surface = this.surface,
+            objectTypeRec = this
         )
     }
 

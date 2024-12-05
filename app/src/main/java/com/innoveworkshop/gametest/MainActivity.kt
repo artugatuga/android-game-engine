@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onTouchEvent(e: MotionEvent): Boolean {
         when (e.action) {
-            MotionEvent.ACTION_DOWN -> {
+            MotionEvent.ACTION_UP -> {
                 game!!.player!!.ApplyForce(
                     Vector(0f, 1200f)
                 )

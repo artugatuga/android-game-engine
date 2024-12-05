@@ -1,5 +1,6 @@
 package com.innoveworkshop.gametest.engine
 
+import android.util.Log
 import com.innoveworkshop.gametest.engine.GameSurface
 
 class PhysicsBody(
@@ -16,6 +17,8 @@ class PhysicsBody(
     @JvmField var lifeTime: Float = 0f,
     @JvmField var maxLifeTime: Int = 0,
     @JvmField var surface: GameSurface? = null,
+    @JvmField var objectTypeCir: Circle? = null,
+    @JvmField var objectTypeRec: Rectangle? = null,
 )
 
 class Physics {
@@ -101,14 +104,56 @@ class Physics {
         if (physicsBody.collision && physicsBody.surface!!.gameObjects[physicsBody.id] != null){
             var i = 0
             val mainPosition = physicsBody.surface!!.gameObjects[physicsBody.id]!!.position
+
             while (i < physicsBody.surface!!.gameObjects.size){
                 if(physicsBody.surface!!.gameObjects[i] != null){
                     if(physicsBody.surface!!.gameObjects[i]!!.id != physicsBody.id ){
-                        val secPosition = physicsBody.surface!!.gameObjects[i]!!.position
-                        val vecBetween = SubtractingVectors(mainPosition, secPosition)
-                        val dist = MagnitudeVector(vecBetween)
 
-                        if(mainPosition.x >= secPosition.x && i != 0){
+                        val physicsBodySecObj = physicsBody.surface!!.gameObjects[i]!!.physicsBody
+                        val secObjPosition = physicsBody.surface!!.gameObjects[i]!!.position
+                        val vecBetween = SubtractingVectors(mainPosition, secObjPosition)
+                        val dist = MagnitudeVector(vecBetween)
+                        var distBetween = false
+
+                        if(physicsBody.objectTypeCir != null){
+                            if(physicsBodySecObj!!.objectTypeCir != null){
+                                if(
+                                    mainPosition.x < secObjPosition.x + physicsBody.objectTypeCir!!.radius && mainPosition.x + physicsBodySecObj.objectTypeCir!!.radius > secObjPosition.x &&
+                                    mainPosition.y < secObjPosition.y + physicsBody.objectTypeCir!!.radius && mainPosition.y + physicsBodySecObj.objectTypeCir!!.radius > secObjPosition.y
+                                ){
+                                    distBetween = true
+                                    Log.d("COLLISION", "I AM TOUCHING SOMETHING")
+                                }
+                            }else{
+                                if(
+                                    mainPosition.x < secObjPosition.x + physicsBody.objectTypeCir!!.radius && mainPosition.x + physicsBodySecObj.objectTypeRec!!.width > secObjPosition.x &&
+                                    mainPosition.y < secObjPosition.y + physicsBody.objectTypeCir!!.radius && mainPosition.y + physicsBodySecObj.objectTypeRec!!.height > secObjPosition.y
+                                ){
+                                    distBetween = true
+                                    Log.d("COLLISION", "I AM TOUCHING SOMETHING")
+                                }
+                            }
+                        }else{
+                            if(physicsBodySecObj!!.objectTypeRec != null){
+                                if(
+                                    mainPosition.x < secObjPosition.x + physicsBody.objectTypeRec!!.width && mainPosition.x + physicsBodySecObj.objectTypeCir!!.radius > secObjPosition.x &&
+                                    mainPosition.y < secObjPosition.y + physicsBody.objectTypeRec!!.height && mainPosition.y + physicsBodySecObj.objectTypeCir!!.radius > secObjPosition.y
+                                ){
+                                    distBetween = true
+                                    Log.d("COLLISION", "I AM TOUCHING SOMETHING")
+                                }
+                            }else{
+                                if(
+                                    mainPosition.x < secObjPosition.x + physicsBody.objectTypeRec!!.width && mainPosition.x + physicsBodySecObj.objectTypeRec!!.width > secObjPosition.x &&
+                                    mainPosition.y < secObjPosition.y + physicsBody.objectTypeRec!!.height && mainPosition.y + physicsBodySecObj.objectTypeRec!!.height > secObjPosition.y
+                                ){
+                                    distBetween = true
+                                    Log.d("COLLISION", "I AM TOUCHING SOMETHING")
+                                }
+                            }
+                        }
+
+                        if(distBetween){
                             physicsBody.timeFromForceAplied = 0f
                             physicsBody.initialVelocity.x = -physicsBody.currentVelocity.x
                             physicsBody.initialPosition.x = physicsBody.currentPosition.x - 100
