@@ -6,6 +6,7 @@ abstract class GameObject {
     var position: Vector
     protected var deltaTime = 1000/60/1000f
     protected var lifeTime = 0f
+    var id:Int? = null
 
     protected var gameSurface: GameSurface? = null
     var isDestroyed: Boolean = false

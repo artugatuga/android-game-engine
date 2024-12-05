@@ -1,7 +1,6 @@
 package com.innoveworkshop.gametest.engine
 
-import android.util.Log
-import androidx.compose.runtime.currentComposer
+import com.innoveworkshop.gametest.engine.GameSurface
 
 class PhysicsBody(
     @JvmField var mass: Float,
@@ -13,6 +12,7 @@ class PhysicsBody(
     @JvmField var currentVelocity: Vector,
     @JvmField var lifeTime: Float = 0f,
     @JvmField var maxLifeTime: Int = 0,
+    @JvmField var surface: GameSurface? = null,
 )
 
 class Physics {
@@ -76,6 +76,14 @@ class Physics {
             physicsBody.initialPosition.y + (physicsBody.initialVelocity.y * time) + (objectGravity) * (time * time)
         )
 
+        CollisionDetection(physicsBody)
+
         return physicsBody
+    }
+
+    fun CollisionDetection(
+        physicsBody: PhysicsBody,
+    ){
+        physicsBody.surface!!.gameObjects[0]
     }
 }

@@ -31,14 +31,16 @@ class PipesHandler {
                 Vector(surface.width.toFloat(), upPipeHeight/2),
                 100f,
                 upPipeHeight,
-                Color.rgb(255, 255, 255)
+                Color.rgb(255, 255, 255),
+                surface
             )
 
             val downPipe = Pipe(
                 Vector(surface.width.toFloat(), surface.height.toFloat() - downPipeHeight/2),
                 100f,
                 downPipeHeight,
-                Color.rgb(255, 255, 255)
+                Color.rgb(255, 255, 255),
+                surface
             )
 
             surface.addGameObject(upPipe)

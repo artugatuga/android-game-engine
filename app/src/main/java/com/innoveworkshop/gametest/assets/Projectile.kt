@@ -1,6 +1,7 @@
 package com.innoveworkshop.gametest.assets
 
 import com.innoveworkshop.gametest.engine.Circle
+import com.innoveworkshop.gametest.engine.GameSurface
 import com.innoveworkshop.gametest.engine.Vector
 import com.innoveworkshop.gametest.engine.Physics
 import com.innoveworkshop.gametest.engine.PhysicsBody
@@ -8,7 +9,8 @@ import com.innoveworkshop.gametest.engine.PhysicsBody
 class Projectile(
     position: Vector?,
     radius: Float,
-    color: Int
+    color: Int,
+    surface: GameSurface
 ) : Circle (position, radius, color) {
     var time = 0f
     var physicsBody: PhysicsBody? = null
@@ -19,11 +21,12 @@ class Projectile(
                 mass = 2f,
                 gravity = 2f,
                 airResistence = 150f,
-                initialPosition = position,
+                initialPosition = Vector(0f, 0f),
                 initialVelocity = Vector(0f, 0f),
-                currentPosition = position,
+                currentPosition = Vector(0f, 0f),
                 currentVelocity = Vector(0f, 0f),
-                maxLifeTime = 3
+                maxLifeTime = 3,
+                surface = surface
             )
         }
     }
@@ -43,7 +46,7 @@ class Projectile(
             position = physicsBody!!.currentPosition
 
             if(physicsBody!!.maxLifeTime <= physicsBody!!.lifeTime){
-                isDestroyed = true
+                destroy()
             }
         }
     }

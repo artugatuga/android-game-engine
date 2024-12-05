@@ -10,7 +10,8 @@ class Pipe(
     position: Vector?,
     width: Float,
     height: Float,
-    color: Int
+    color: Int,
+    surface: GameSurface
 ) : Rectangle (position, width, height, color) {
     var time = 0f
     var physicsBody: PhysicsBody? = null
@@ -25,7 +26,8 @@ class Pipe(
                 initialVelocity = Vector(0f, 0f),
                 currentPosition = position,
                 currentVelocity = Vector(0f, 0f),
-                maxLifeTime = 5
+                maxLifeTime = 5,
+                surface = surface
             )
         }
     }
@@ -43,6 +45,10 @@ class Pipe(
             )
 
             position = physicsBody!!.currentPosition
+
+            if(physicsBody!!.maxLifeTime <= physicsBody!!.lifeTime){
+                destroy()
+            }
         }
     }
 

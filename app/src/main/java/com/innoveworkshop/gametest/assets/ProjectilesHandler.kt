@@ -11,13 +11,15 @@ import com.innoveworkshop.gametest.engine.Vector
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 class ProjectilesHandler {
     var InitialPos = mutableStateOf(Vector(0f,0f))
+    var offSet = 60f
 
     inner class Handler : GameObject() {
         fun CreateProjectile(surface: GameSurface){
             val projectile = Projectile(
-                InitialPos.value,
+                Vector(InitialPos.value.x + offSet, InitialPos.value.y - offSet),
                 10f,
-                Color.rgb(128, 14, 80)
+                Color.rgb(128, 14, 80),
+                surface
             )
             surface.addGameObject(projectile)
             projectile.ApplyForceToProjectile(

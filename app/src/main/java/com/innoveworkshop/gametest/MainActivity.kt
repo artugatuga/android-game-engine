@@ -64,7 +64,10 @@ class MainActivity : AppCompatActivity() {
             super.onStart(surface)
             player = Player(
                 Vector((surface!!.width / 4).toFloat(), (surface.height / 2).toFloat()),
-                100f, 100f, Color.rgb(128, 14, 80)
+                100f,
+                100f,
+                Color.rgb(128, 14, 80),
+                surface
             )
             surface.addGameObject(player!!)
         }

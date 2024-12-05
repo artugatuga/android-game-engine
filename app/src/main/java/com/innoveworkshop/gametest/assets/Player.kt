@@ -1,5 +1,6 @@
 package com.innoveworkshop.gametest.assets
 
+import com.innoveworkshop.gametest.engine.GameSurface
 import com.innoveworkshop.gametest.engine.Rectangle
 import com.innoveworkshop.gametest.engine.Vector
 import com.innoveworkshop.gametest.engine.Physics
@@ -9,11 +10,10 @@ class Player(
     position: Vector?,
     width: Float,
     height: Float,
-    color: Int
+    color: Int,
+    surface: GameSurface
 ) : Rectangle (position, width, height, color) {
-
     var timeFromForceApplied = 0f
-
     var physicsBody: PhysicsBody? = null
 
     init {
@@ -25,7 +25,8 @@ class Player(
                 initialPosition = position,
                 initialVelocity = Vector(0f, 0f),
                 currentPosition = position,
-                currentVelocity = Vector(0f, 0f)
+                currentVelocity = Vector(0f, 0f),
+                surface = surface
             )
         }
     }
