@@ -10,37 +10,34 @@ class Projectile(
     position: Vector?,
     radius: Float,
     color: Int,
-    surface: GameSurface
+    val surface: GameSurface
 ) : Circle (position, radius, color) {
-    var time = 0f
     var physicsBody: PhysicsBody? = null
 
-    init {
-        if (position != null) {
-            physicsBody = PhysicsBody(
-                mass = 2f,
-                gravity = 2f,
-                airResistence = 150f,
-                initialPosition = Vector(0f, 0f),
-                initialVelocity = Vector(0f, 0f),
-                currentPosition = Vector(0f, 0f),
-                currentVelocity = Vector(0f, 0f),
-                maxLifeTime = 3,
-                surface = surface
-            )
-        }
+    override fun onStart(surface: GameSurface?) {
+        super.onStart(surface)
+        physicsBody = PhysicsBody(
+            id = id!!,
+            collision = true,
+            mass = 2f,
+            gravity = 2f,
+            airResistence = 150f,
+            initialPosition = Vector(0f, 0f),
+            initialVelocity = Vector(0f, 0f),
+            currentPosition = Vector(0f, 0f),
+            currentVelocity = Vector(0f, 0f),
+            maxLifeTime = 3,
+            surface = this.surface
+        )
     }
+
 
     override fun onFixedUpdate() {
         super.onFixedUpdate()
 
         if(!isDestroyed){
-            physicsBody!!.lifeTime += deltaTime
-            time += deltaTime
-
             physicsBody = Physics().UpdatePhysicsBody(
-                physicsBody = physicsBody!!,
-                time = time
+                physicsBody = physicsBody!!
             )
 
             position = physicsBody!!.currentPosition
@@ -56,7 +53,6 @@ class Projectile(
     ){
         physicsBody!!.initialPosition = position
 
-        time = 0f
         val tempForce = Physics().ApplyForce(
             force = force,
             physicsBody = physicsBody!!

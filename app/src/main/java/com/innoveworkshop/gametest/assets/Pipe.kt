@@ -11,37 +11,34 @@ class Pipe(
     width: Float,
     height: Float,
     color: Int,
-    surface: GameSurface
+    val surface: GameSurface
 ) : Rectangle (position, width, height, color) {
-    var time = 0f
     var physicsBody: PhysicsBody? = null
 
-    init {
-        if (position != null) {
-            physicsBody = PhysicsBody(
-                mass = 2f,
-                gravity = 0f,
-                airResistence = 1f,
-                initialPosition = position,
-                initialVelocity = Vector(0f, 0f),
-                currentPosition = position,
-                currentVelocity = Vector(0f, 0f),
-                maxLifeTime = 5,
-                surface = surface
-            )
-        }
+    override fun onStart(surface: GameSurface?) {
+        super.onStart(surface)
+        physicsBody = PhysicsBody(
+            id = id!!,
+            collision = false,
+            mass = 2f,
+            gravity = 0f,
+            airResistence = 1f,
+            initialPosition = position,
+            initialVelocity = Vector(0f, 0f),
+            currentPosition = position,
+            currentVelocity = Vector(0f, 0f),
+            maxLifeTime = 5,
+            surface = this.surface
+        )
     }
 
     override fun onFixedUpdate() {
         super.onFixedUpdate()
 
         if(!isDestroyed){
-            physicsBody!!.lifeTime += deltaTime
-            time += deltaTime
 
             physicsBody = Physics().UpdatePhysicsBody(
-                physicsBody = physicsBody!!,
-                time = time
+                physicsBody = physicsBody!!
             )
 
             position = physicsBody!!.currentPosition
@@ -57,7 +54,6 @@ class Pipe(
     ){
         physicsBody!!.initialPosition = position
 
-        time = 0f
         val tempForce = Physics().ApplyForce(
             force = force,
             physicsBody = physicsBody!!

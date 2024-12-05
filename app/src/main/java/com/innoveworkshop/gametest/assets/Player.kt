@@ -11,40 +11,36 @@ class Player(
     width: Float,
     height: Float,
     color: Int,
-    surface: GameSurface
+    val surface: GameSurface
 ) : Rectangle (position, width, height, color) {
-    var timeFromForceApplied = 0f
     var physicsBody: PhysicsBody? = null
 
-    init {
-        if (position != null) {
-            physicsBody = PhysicsBody(
-                mass = 2f,
-                gravity = 3f,
-                airResistence = 0f,
-                initialPosition = position,
-                initialVelocity = Vector(0f, 0f),
-                currentPosition = position,
-                currentVelocity = Vector(0f, 0f),
-                surface = surface
-            )
-        }
+    override fun onStart(surface: GameSurface?) {
+        super.onStart(surface)
+        physicsBody = PhysicsBody(
+            id = id!!,
+            collision = false,
+            mass = 2f,
+            gravity = 3f,
+            airResistence = 0f,
+            initialPosition = position,
+            initialVelocity = Vector(0f, 0f),
+            currentPosition = position,
+            currentVelocity = Vector(0f, 0f),
+            surface = this.surface
+        )
     }
 
     override fun onFixedUpdate() {
         super.onFixedUpdate()
 
         if (!isFloored) {
-            physicsBody!!.lifeTime += deltaTime
-            timeFromForceApplied += deltaTime
-
             physicsBody = Physics().UpdatePhysicsBody(
-                physicsBody = physicsBody!!,
-                time = timeFromForceApplied
+                physicsBody = physicsBody!!
             )
             position = physicsBody!!.currentPosition
         }else{
-            timeFromForceApplied = 0f
+            physicsBody!!.timeFromForceAplied = 0f
         }
     }
 
@@ -53,7 +49,6 @@ class Player(
     ){
         physicsBody!!.initialPosition = position
 
-        timeFromForceApplied = 0f
         val tempForce = Physics().ApplyForce(
             force = force,
             physicsBody = physicsBody!!

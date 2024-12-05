@@ -3,6 +3,8 @@ package com.innoveworkshop.gametest.engine
 import com.innoveworkshop.gametest.engine.GameSurface
 
 class PhysicsBody(
+    @JvmField var id: Int,
+    @JvmField var collision: Boolean,
     @JvmField var mass: Float,
     @JvmField var gravity: Float,
     @JvmField var airResistence: Float,
@@ -10,6 +12,7 @@ class PhysicsBody(
     @JvmField var initialVelocity: Vector,
     @JvmField var currentPosition: Vector,
     @JvmField var currentVelocity: Vector,
+    @JvmField var timeFromForceAplied: Float = 0f,
     @JvmField var lifeTime: Float = 0f,
     @JvmField var maxLifeTime: Int = 0,
     @JvmField var surface: GameSurface? = null,
@@ -17,6 +20,7 @@ class PhysicsBody(
 
 class Physics {
     var defaultGravity = 98.1f
+    var deltaTime = 1/60f
 
     fun ApplyForce(
         force: Vector = Vector(1f,1f),
@@ -52,20 +56,31 @@ class Physics {
             acceleration.y += physicsBody.initialVelocity.y
         }
 
+        physicsBody.timeFromForceAplied = 0f
+
         return acceleration
     }
 
     fun UpdatePhysicsBody(
+        physicsBody: PhysicsBody
+    ) : PhysicsBody {
+        physicsBody.lifeTime += deltaTime
+        physicsBody.timeFromForceAplied += deltaTime
+
+        return PositionCalculus(CollisionDetection(physicsBody), physicsBody.timeFromForceAplied)
+    }
+
+    fun PositionCalculus(
         physicsBody: PhysicsBody,
         time: Float
-    ):PhysicsBody {
+    ) : PhysicsBody{
         val objectGravity = defaultGravity * physicsBody.gravity
         var objectAirResistence = physicsBody.airResistence
 
         if (physicsBody.initialVelocity.x > 0f){
             objectAirResistence *= -1
-        }
 
+        }
         physicsBody.currentVelocity = Vector(
             physicsBody.initialVelocity.x + (objectAirResistence * time),
             physicsBody.initialVelocity.y + (objectGravity * time)
@@ -76,14 +91,37 @@ class Physics {
             physicsBody.initialPosition.y + (physicsBody.initialVelocity.y * time) + (objectGravity) * (time * time)
         )
 
-        CollisionDetection(physicsBody)
-
         return physicsBody
     }
 
     fun CollisionDetection(
         physicsBody: PhysicsBody,
-    ){
-        physicsBody.surface!!.gameObjects[0]
+    ) : PhysicsBody{
+
+        if (physicsBody.collision && physicsBody.surface!!.gameObjects[physicsBody.id] != null){
+            var i = 0
+            val mainPosition = physicsBody.surface!!.gameObjects[physicsBody.id]!!.position
+            while (i < physicsBody.surface!!.gameObjects.size){
+                if(physicsBody.surface!!.gameObjects[i] != null){
+                    if(physicsBody.surface!!.gameObjects[i]!!.id != physicsBody.id ){
+                        val secPosition = physicsBody.surface!!.gameObjects[i]!!.position
+                        val vecBetween = SubtractingVectors(mainPosition, secPosition)
+                        val dist = MagnitudeVector(vecBetween)
+
+                        if(mainPosition.x >= secPosition.x && i != 0){
+                            physicsBody.timeFromForceAplied = 0f
+                            physicsBody.initialVelocity.x = -physicsBody.currentVelocity.x
+                            physicsBody.initialPosition.x = physicsBody.currentPosition.x - 100
+                            physicsBody.initialPosition.y = physicsBody.currentPosition.y
+                            physicsBody.airResistence = 0f
+                            break
+                        }
+                    }
+                }
+                i++
+            }
+        }
+
+        return physicsBody
     }
 }
