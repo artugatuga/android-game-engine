@@ -26,7 +26,7 @@ class Pipe(
             initialVelocity = Vector(0f, 0f),
             currentPosition = position,
             currentVelocity = Vector(0f, 0f),
-            maxLifeTime = 5,
+            maxLifeTime = 8,
             surface = this.surface,
             objectTypeRec = this
         )

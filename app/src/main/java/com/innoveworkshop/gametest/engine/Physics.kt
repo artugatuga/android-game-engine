@@ -3,6 +3,7 @@ package com.innoveworkshop.gametest.engine
 import androidx.compose.runtime.currentComposer
 import androidx.core.view.ContentInfoCompat.Flags
 import kotlin.math.atan
+import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
 import kotlin.math.tan
@@ -84,14 +85,14 @@ class Physics {
         val objectGravity = defaultGravity * physicsBody.gravity
         var objectAirResistence = physicsBody.airResistence
 
-        if (physicsBody.initialVelocity.x > 0f){
-            objectAirResistence *= -1
-
-        }
         physicsBody.currentVelocity = Vector(
             physicsBody.initialVelocity.x + (objectAirResistence * time),
             physicsBody.initialVelocity.y + (objectGravity * time)
         )
+
+        if (physicsBody.currentVelocity.x > 0f){
+            objectAirResistence *= -1
+        }
 
         physicsBody.currentPosition = Vector(
             physicsBody.initialPosition.x + (physicsBody.initialVelocity.x * time) + (objectAirResistence/2) * (time * time),
@@ -104,95 +105,153 @@ class Physics {
     fun CollisionDetection(
         physicsBody: PhysicsBody,
     ) : PhysicsBody{
-        if(physicsBody.timeFromForceAplied > deltaTime * 4){
+        if(physicsBody.timeFromForceAplied > deltaTime * 3){
             if (physicsBody.collision && physicsBody.surface!!.gameObjects[physicsBody.id] != null){
-//            var i = 0
-//            while (i < physicsBody.surface!!.pipesInGame.size){
-//                val touching = colisaoCirculoRetangulo(physicsBody.objectTypeCir!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
-//
-//                if(touching){
-//                    physicsBody.objectTypeCir!!.destroy()
-////                    physicsBody.timeFromForceAplied = 0f
-////                    physicsBody.initialVelocity.x = -physicsBody.currentVelocity.x
-////                    physicsBody.initialPosition.x = physicsBody.currentPosition.x -100
-////                    physicsBody.initialPosition.y = physicsBody.currentPosition.y
-////                    physicsBody.airResistence = 0f
-//                }
-//
-//                i++
-//            }
-
-                for(Circle in physicsBody.surface!!.pipesInGame){
-                    var distanceX = physicsBody.objectTypeCir!!.position.x - Circle!!.position.x
-                    var distanceY = physicsBody.objectTypeCir!!.position.y - Circle.position.y
-                    var distance = sqrt((distanceX * distanceX) + (distanceY * distanceY))
-                    if(distance <= (Circle.physicsBody!!.objectTypeCir!!.radius + physicsBody.objectTypeCir!!.radius)){
-                        var mainObjectSpeed = sqrt((physicsBody.currentVelocity.x*physicsBody.currentVelocity.x)+(physicsBody.currentVelocity.y*physicsBody.currentVelocity.y))
-                        var velocityX = (distanceX/distance)*mainObjectSpeed
-                        var velocityY = (distanceY/distance)*mainObjectSpeed
-                        var velocity = Vector(velocityX * 0.75f, velocityY * 0.75f)
-                        physicsBody.initialVelocity = velocity
-                        physicsBody.initialPosition = physicsBody.currentPosition
-                        physicsBody.timeFromForceAplied = 0f
-                        physicsBody.airResistence = 0f
-                    }
-                }
-
+                return Touching(physicsBody)
             }
         }
         return physicsBody
     }
 
-    fun colisaoCirculoRetangulo(circle: Circle, rectangle: Rectangle): Boolean {
-        val distanceVec = SubtractingVectors(rectangle.position, circle.position)
-        val distance = MagnitudeVector(distanceVec)
-        var realDistance: Float
+    fun Touching(physicsBody: PhysicsBody) : PhysicsBody{
+        var i = 0
+        while (i < physicsBody.surface!!.pipesInGame.size){
+            var touching: Boolean
 
-        val alpha = atan(distanceVec.y/distanceVec.x)
+            if(physicsBody.objectTypeCir != null){
+                touching = circleRectangleColision(physicsBody.objectTypeCir!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
+            }else{
+                touching = rectangleRectangleColision(physicsBody.objectTypeRec!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
+            }
 
-        val y = distanceVec.x/ tan(alpha)
+            if (touching){
+                var side: Int
+                if(physicsBody.objectTypeCir != null){
+                    side = colisionSideCirRec(physicsBody.objectTypeCir!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
+                }else{
+                    side = colisionSideRec(physicsBody.objectTypeRec!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
+                }
 
-        val h = sqrt(distanceVec.x.pow(2).toDouble() + y.pow(2).toDouble())
-
-        realDistance = (distance - circle.radius - h).toFloat()
-
-        if(realDistance < 0){
-            realDistance *= -1
+                if (side == 1){ //tops
+                    physicsBody.initialVelocity.y = -physicsBody.currentVelocity.y
+                    physicsBody.initialPosition = physicsBody.currentPosition
+                    physicsBody.timeFromForceAplied = 0f
+                }else{
+                    physicsBody.initialVelocity.x = -physicsBody.currentVelocity.x
+                    physicsBody.initialPosition = physicsBody.currentPosition
+                    physicsBody.timeFromForceAplied = 0f
+                }
+                return physicsBody
+            }
+            i++
         }
 
-        if(realDistance < 30){
+        return physicsBody
+    }
+
+    fun onCollision(physicsBody: PhysicsBody) : Boolean{
+
+        val body = physicsBody
+        val newBody = Touching(physicsBody)
+
+        if(newBody.timeFromForceAplied != body.timeFromForceAplied){
             return true
         }
 
-//        if (rectangle.position.x < circle.position.x){
-//            mult = -1
-//        }
-//        else{
-//            mult = 1
-//        }
-//        var disX = ((rectangle.position.x + rectangle.width/2 * mult)-(circle.position.x + circle.radius * mult))
-//
-//        if (rectangle.position.y < circle.position.y){
-//            mult = -1
-//        }
-//        else{
-//            mult = 1
-//        }
-//
-//        var disY = ((rectangle.position.y + rectangle.height/2 * mult)-(circle.position.y + circle.radius * mult))
-//        if (disX < 0){
-//            disX *= -1
-//        }
-//        if (disY < 0){
-//            disY *= -1
-//        }
-//
-//        if(disY <= rectangle.height){
-//            return true
-//        }
-//        if(disX <= rectangle.width){
-//            return true
-//        }
+        return false
+    }
+
+    fun colisionSideCirRec(circle: Circle, rectangle: Rectangle) : Int{
+        var distXLeft = (circle.position.x + circle.radius) - (rectangle.position.x - rectangle.width/2)
+        var distXRight = (circle.position.x - circle.radius) - (rectangle.position.x + rectangle.width/2)
+        var distYTop = (circle.position.y + circle.radius) - (rectangle.position.y - rectangle.height/2)
+        var distYBottom = (circle.position.y - circle.radius) - (rectangle.position.y + rectangle.height/2)
+
+        if(distXLeft < 0){
+            distXLeft *= -1
+        }
+        if(distXRight < 0){
+            distXRight *= -1
+        }
+        if(distYTop < 0){
+            distYTop *= -1
+        }
+        if(distYBottom < 0){
+            distYBottom *= -1
+        }
+
+        val minDistX = min(distXLeft, distXRight)
+        val minDistY = min(distYTop, distYBottom)
+
+        if(minDistX < minDistY){
+            return 2
+        }else{
+            return 1
+        }
+    }
+
+    fun colisionSideRec(mainRectangle: Rectangle, secRectangle: Rectangle) : Int{
+        var distXLeft = (mainRectangle.position.x + mainRectangle.width/2) - (secRectangle.position.x - secRectangle.width/2)
+        var distXRight = (mainRectangle.position.x - mainRectangle.width/2) - (secRectangle.position.x + secRectangle.width/2)
+        var distYTop = (mainRectangle.position.y + mainRectangle.height/2) - (secRectangle.position.y - secRectangle.height/2)
+        var distYBottom = (mainRectangle.position.y - mainRectangle.height/2) - (secRectangle.position.y + secRectangle.height/2)
+
+        if(distXLeft < 0){
+            distXLeft *= -1
+        }
+        if(distXRight < 0){
+            distXRight *= -1
+        }
+        if(distYTop < 0){
+            distYTop *= -1
+        }
+        if(distYBottom < 0){
+            distYBottom *= -1
+        }
+
+        val minDistX = min(distXLeft, distXRight)
+        val minDistY = min(distYTop, distYBottom)
+
+        if(minDistX < minDistY){
+            return 2
+        }else{
+            return 1
+        }
+    }
+
+    fun circleRectangleColision(circle: Circle, rectangle: Rectangle) : Boolean{
+        var passingX = false
+        var passingY = false
+
+        if(circle.position.x > rectangle.position.x - rectangle.width/2 && circle.position.x < rectangle.position.x + rectangle.width/2){
+            passingX = true
+        }
+
+        if(circle.position.y > rectangle.position.y - rectangle.height/2 && circle.position.y < rectangle.position.y + rectangle.height/2){
+            passingY = true
+        }
+        if (passingX && passingY){
+            return true
+        }
+
+        return false
+    }
+
+    fun rectangleRectangleColision(mainRectangle: Rectangle, secRectangle: Rectangle) : Boolean{
+        var passingX = false
+        var passingY = false
+
+        if(mainRectangle.position.x + mainRectangle.width/2 > secRectangle.position.x - secRectangle.width/2 && mainRectangle.position.x - mainRectangle.width/2 < secRectangle.position.x + secRectangle.width/2){
+            passingX = true
+        }
+
+        if(mainRectangle.position.y + mainRectangle.height/2 > secRectangle.position.y - secRectangle.height/2 && mainRectangle.position.y - mainRectangle.height/2 < secRectangle.position.y + secRectangle.height/2){
+            passingY = true
+        }
+        if (passingX && passingY){
+            return true
+        }
+
         return false
     }
 }

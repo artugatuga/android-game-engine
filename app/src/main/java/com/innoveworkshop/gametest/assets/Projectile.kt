@@ -25,17 +25,16 @@ class Projectile(
             initialVelocity = Vector(0f, 0f),
             currentPosition = Vector(0f, 0f),
             currentVelocity = Vector(0f, 0f),
-            maxLifeTime = 3,
+            maxLifeTime = 10,
             surface = this.surface,
             objectTypeCir = this
         )
     }
 
-
     override fun onFixedUpdate() {
         super.onFixedUpdate()
 
-        if(!isDestroyed){
+        if(!isDestroyed && physicsBody != null){
             physicsBody = Physics().UpdatePhysicsBody(
                 physicsBody = physicsBody!!
             )

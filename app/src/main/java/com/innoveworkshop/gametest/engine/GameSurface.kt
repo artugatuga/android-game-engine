@@ -98,7 +98,7 @@ class GameSurface @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        root!!.onDraw(canvas)
+        root?.onDraw(canvas)
         for (gameObject in gameObjects) {
             gameObject?.onDraw(canvas)
         }
@@ -106,10 +106,17 @@ class GameSurface @JvmOverloads constructor(
 
     internal inner class FixedUpdateTimer : TimerTask() {
         override fun run() {
-            for (gameObject in gameObjects) {
-                gameObject?.onFixedUpdate()
+
+            root?.onFixedUpdate()
+
+            var i = 0
+            while (i < gameObjects.size){
+                if (gameObjects[i] != null){
+                    gameObjects[i]?.onFixedUpdate()
+                }
+                i++
             }
-            root!!.onFixedUpdate()
+
             invalidate()
         }
     }

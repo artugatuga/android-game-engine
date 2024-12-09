@@ -18,7 +18,7 @@ class Player(
         super.onStart(surface)
         physicsBody = PhysicsBody(
             id = id!!,
-            collision = false,
+            collision = true,
             mass = 2f,
             gravity = 3f,
             airResistence = 0f,

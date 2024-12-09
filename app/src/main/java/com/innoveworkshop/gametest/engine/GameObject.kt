@@ -4,7 +4,7 @@ import android.graphics.Canvas
 
 abstract class GameObject {
     var position: Vector
-    protected var deltaTime = 1000/60/1000f
+    protected var deltaTime = 1/60f
     protected var lifeTime = 0f
     var id: Int? = null
     var physicsBody: PhysicsBody? = null
@@ -27,7 +27,7 @@ abstract class GameObject {
     }
 
     fun destroy() {
-        gameSurface!!.removeGameObject(this)
+        //gameSurface!!.removeGameObject(this)
         isDestroyed = true
     }
 
@@ -39,7 +39,7 @@ abstract class GameObject {
         lifeTime += deltaTime
 
         if (isDestroyed) {
-            setPosition(-100f, -100f)
+            setPosition(-10000f, -10000f)
         }
     }
 

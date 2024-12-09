@@ -79,13 +79,13 @@ class MainActivity : AppCompatActivity() {
                 surface
             )
             surface.addGameObject(player!!)
-            surface.addGameObject(testCircle!!)
-            surface.addPipe(testCircle!!)
+            //surface.addGameObject(testCircle!!)
+            //surface.addPipe(testCircle!!)
         }
 
         override fun onFixedUpdate() {
             super.onFixedUpdate()
-            //time = PipesHandler().Handler().onFixedUpdate(gameSurface!!, time, deltaTime)
+            time = PipesHandler().Handler().onFixedUpdate(gameSurface!!, time, deltaTime)
         }
     }
 }
