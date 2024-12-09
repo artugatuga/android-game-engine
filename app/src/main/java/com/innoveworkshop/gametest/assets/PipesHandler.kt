@@ -43,14 +43,16 @@ class PipesHandler {
                 surface
             )
 
+//            surface.addPipe(upPipe)
+//            surface.addPipe(downPipe)
             surface.addGameObject(upPipe)
             surface.addGameObject(downPipe)
 
             upPipe.ApplyForceToPipe(
-                Vector(500f, 0f)
+                Vector(200f, 0f)
             )
             downPipe.ApplyForceToPipe(
-                Vector(500f, 0f)
+                Vector(200f, 0f)
             )
         }
     }

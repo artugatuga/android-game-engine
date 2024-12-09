@@ -25,6 +25,20 @@ fun MultiplyVectors(
     return Vector(vec1.x * vec2.x, vec1.y * vec2.y)
 }
 
+fun MultiplyVector(
+    vec1: Vector,
+    num: Float
+) : Vector{
+    return Vector(vec1.x * num, vec1.y * num)
+}
+
+fun DivideVectors(
+    vec1: Vector,
+    vec2: Vector
+) : Vector{
+    return Vector(vec1.x / vec2.x, vec1.y / vec2.y)
+}
+
 fun DivideVector(
     vec1: Vector,
     num: Float

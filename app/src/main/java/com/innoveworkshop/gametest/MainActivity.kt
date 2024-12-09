@@ -14,6 +14,8 @@ import com.innoveworkshop.gametest.engine.GameObject
 import com.innoveworkshop.gametest.engine.GameSurface
 import com.innoveworkshop.gametest.engine.Vector
 import com.innoveworkshop.gametest.assets.ProjectilesHandler
+import com.innoveworkshop.gametest.assets.TestCircle
+import com.innoveworkshop.gametest.engine.Circle
 
 class MainActivity : AppCompatActivity() {
     protected var gameSurface: GameSurface? = null
@@ -58,6 +60,7 @@ class MainActivity : AppCompatActivity() {
 
     inner class Game : GameObject() {
         var player: Player? = null
+        var testCircle: TestCircle? = null
         var time: Float = 3f
 
         override fun onStart(surface: GameSurface?) {
@@ -69,12 +72,20 @@ class MainActivity : AppCompatActivity() {
                 Color.rgb(128, 14, 80),
                 surface
             )
+            testCircle = TestCircle(
+                Vector((surface.width / 2).toFloat(), (surface.height / 2).toFloat()),
+                100f,
+                Color.rgb(128, 14, 80),
+                surface
+            )
             surface.addGameObject(player!!)
+            surface.addGameObject(testCircle!!)
+            surface.addPipe(testCircle!!)
         }
 
         override fun onFixedUpdate() {
             super.onFixedUpdate()
-            time = PipesHandler().Handler().onFixedUpdate(gameSurface!!, time, deltaTime)
+            //time = PipesHandler().Handler().onFixedUpdate(gameSurface!!, time, deltaTime)
         }
     }
 }

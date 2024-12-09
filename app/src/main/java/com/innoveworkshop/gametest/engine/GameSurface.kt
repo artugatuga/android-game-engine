@@ -20,6 +20,7 @@ class GameSurface @JvmOverloads constructor(
 
     // Create the GameObject list.
     var gameObjects = ArrayList<GameObject?>()
+    var pipesInGame = ArrayList<GameObject?>()
 
     init {
         // Ensure we are on top of everything.
@@ -56,6 +57,10 @@ class GameSurface @JvmOverloads constructor(
 
     fun setRootGameObject(root: GameObject?) {
         this.root = root
+    }
+
+    fun addPipe(gameObject: GameObject){
+        pipesInGame.add(gameObject)
     }
 
     fun addGameObject(gameObject: GameObject) {

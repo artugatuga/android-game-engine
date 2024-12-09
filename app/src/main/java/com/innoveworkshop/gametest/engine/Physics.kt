@@ -1,7 +1,11 @@
 package com.innoveworkshop.gametest.engine
 
-import android.util.Log
-import com.innoveworkshop.gametest.engine.GameSurface
+import androidx.compose.runtime.currentComposer
+import androidx.core.view.ContentInfoCompat.Flags
+import kotlin.math.atan
+import kotlin.math.pow
+import kotlin.math.sqrt
+import kotlin.math.tan
 
 class PhysicsBody(
     @JvmField var id: Int,
@@ -100,73 +104,95 @@ class Physics {
     fun CollisionDetection(
         physicsBody: PhysicsBody,
     ) : PhysicsBody{
+        if(physicsBody.timeFromForceAplied > deltaTime * 4){
+            if (physicsBody.collision && physicsBody.surface!!.gameObjects[physicsBody.id] != null){
+//            var i = 0
+//            while (i < physicsBody.surface!!.pipesInGame.size){
+//                val touching = colisaoCirculoRetangulo(physicsBody.objectTypeCir!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
+//
+//                if(touching){
+//                    physicsBody.objectTypeCir!!.destroy()
+////                    physicsBody.timeFromForceAplied = 0f
+////                    physicsBody.initialVelocity.x = -physicsBody.currentVelocity.x
+////                    physicsBody.initialPosition.x = physicsBody.currentPosition.x -100
+////                    physicsBody.initialPosition.y = physicsBody.currentPosition.y
+////                    physicsBody.airResistence = 0f
+//                }
+//
+//                i++
+//            }
 
-        if (physicsBody.collision && physicsBody.surface!!.gameObjects[physicsBody.id] != null){
-            var i = 0
-            val mainPosition = physicsBody.surface!!.gameObjects[physicsBody.id]!!.position
-
-            while (i < physicsBody.surface!!.gameObjects.size){
-                if(physicsBody.surface!!.gameObjects[i] != null){
-                    if(physicsBody.surface!!.gameObjects[i]!!.id != physicsBody.id ){
-
-                        val physicsBodySecObj = physicsBody.surface!!.gameObjects[i]!!.physicsBody
-                        val secObjPosition = physicsBody.surface!!.gameObjects[i]!!.position
-                        val vecBetween = SubtractingVectors(mainPosition, secObjPosition)
-                        val dist = MagnitudeVector(vecBetween)
-                        var distBetween = false
-
-                        if(physicsBody.objectTypeCir != null){
-                            if(physicsBodySecObj!!.objectTypeCir != null){
-                                if(
-                                    mainPosition.x < secObjPosition.x + physicsBody.objectTypeCir!!.radius && mainPosition.x + physicsBodySecObj.objectTypeCir!!.radius > secObjPosition.x &&
-                                    mainPosition.y < secObjPosition.y + physicsBody.objectTypeCir!!.radius && mainPosition.y + physicsBodySecObj.objectTypeCir!!.radius > secObjPosition.y
-                                ){
-                                    distBetween = true
-                                    Log.d("COLLISION", "I AM TOUCHING SOMETHING")
-                                }
-                            }else{
-                                if(
-                                    mainPosition.x < secObjPosition.x + physicsBody.objectTypeCir!!.radius && mainPosition.x + physicsBodySecObj.objectTypeRec!!.width > secObjPosition.x &&
-                                    mainPosition.y < secObjPosition.y + physicsBody.objectTypeCir!!.radius && mainPosition.y + physicsBodySecObj.objectTypeRec!!.height > secObjPosition.y
-                                ){
-                                    distBetween = true
-                                    Log.d("COLLISION", "I AM TOUCHING SOMETHING")
-                                }
-                            }
-                        }else{
-                            if(physicsBodySecObj!!.objectTypeRec != null){
-                                if(
-                                    mainPosition.x < secObjPosition.x + physicsBody.objectTypeRec!!.width && mainPosition.x + physicsBodySecObj.objectTypeCir!!.radius > secObjPosition.x &&
-                                    mainPosition.y < secObjPosition.y + physicsBody.objectTypeRec!!.height && mainPosition.y + physicsBodySecObj.objectTypeCir!!.radius > secObjPosition.y
-                                ){
-                                    distBetween = true
-                                    Log.d("COLLISION", "I AM TOUCHING SOMETHING")
-                                }
-                            }else{
-                                if(
-                                    mainPosition.x < secObjPosition.x + physicsBody.objectTypeRec!!.width && mainPosition.x + physicsBodySecObj.objectTypeRec!!.width > secObjPosition.x &&
-                                    mainPosition.y < secObjPosition.y + physicsBody.objectTypeRec!!.height && mainPosition.y + physicsBodySecObj.objectTypeRec!!.height > secObjPosition.y
-                                ){
-                                    distBetween = true
-                                    Log.d("COLLISION", "I AM TOUCHING SOMETHING")
-                                }
-                            }
-                        }
-
-                        if(distBetween){
-                            physicsBody.timeFromForceAplied = 0f
-                            physicsBody.initialVelocity.x = -physicsBody.currentVelocity.x
-                            physicsBody.initialPosition.x = physicsBody.currentPosition.x - 100
-                            physicsBody.initialPosition.y = physicsBody.currentPosition.y
-                            physicsBody.airResistence = 0f
-                            break
-                        }
+                for(Circle in physicsBody.surface!!.pipesInGame){
+                    var distanceX = physicsBody.objectTypeCir!!.position.x - Circle!!.position.x
+                    var distanceY = physicsBody.objectTypeCir!!.position.y - Circle.position.y
+                    var distance = sqrt((distanceX * distanceX) + (distanceY * distanceY))
+                    if(distance <= (Circle.physicsBody!!.objectTypeCir!!.radius + physicsBody.objectTypeCir!!.radius)){
+                        var mainObjectSpeed = sqrt((physicsBody.currentVelocity.x*physicsBody.currentVelocity.x)+(physicsBody.currentVelocity.y*physicsBody.currentVelocity.y))
+                        var velocityX = (distanceX/distance)*mainObjectSpeed
+                        var velocityY = (distanceY/distance)*mainObjectSpeed
+                        var velocity = Vector(velocityX * 0.75f, velocityY * 0.75f)
+                        physicsBody.initialVelocity = velocity
+                        physicsBody.initialPosition = physicsBody.currentPosition
+                        physicsBody.timeFromForceAplied = 0f
+                        physicsBody.airResistence = 0f
                     }
                 }
-                i++
+
             }
         }
-
         return physicsBody
+    }
+
+    fun colisaoCirculoRetangulo(circle: Circle, rectangle: Rectangle): Boolean {
+        val distanceVec = SubtractingVectors(rectangle.position, circle.position)
+        val distance = MagnitudeVector(distanceVec)
+        var realDistance: Float
+
+        val alpha = atan(distanceVec.y/distanceVec.x)
+
+        val y = distanceVec.x/ tan(alpha)
+
+        val h = sqrt(distanceVec.x.pow(2).toDouble() + y.pow(2).toDouble())
+
+        realDistance = (distance - circle.radius - h).toFloat()
+
+        if(realDistance < 0){
+            realDistance *= -1
+        }
+
+        if(realDistance < 30){
+            return true
+        }
+
+//        if (rectangle.position.x < circle.position.x){
+//            mult = -1
+//        }
+//        else{
+//            mult = 1
+//        }
+//        var disX = ((rectangle.position.x + rectangle.width/2 * mult)-(circle.position.x + circle.radius * mult))
+//
+//        if (rectangle.position.y < circle.position.y){
+//            mult = -1
+//        }
+//        else{
+//            mult = 1
+//        }
+//
+//        var disY = ((rectangle.position.y + rectangle.height/2 * mult)-(circle.position.y + circle.radius * mult))
+//        if (disX < 0){
+//            disX *= -1
+//        }
+//        if (disY < 0){
+//            disY *= -1
+//        }
+//
+//        if(disY <= rectangle.height){
+//            return true
+//        }
+//        if(disX <= rectangle.width){
+//            return true
+//        }
+        return false
     }
 }
