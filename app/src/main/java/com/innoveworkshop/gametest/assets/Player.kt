@@ -34,13 +34,15 @@ class Player(
     override fun onFixedUpdate() {
         super.onFixedUpdate()
 
-        if (!isFloored) {
+        if (!isDestroyed) {
             physicsBody = Physics().UpdatePhysicsBody(
                 physicsBody = physicsBody!!
             )
             position = physicsBody!!.currentPosition
-        }else{
-            physicsBody!!.timeFromForceAplied = 0f
+
+            if(physicsBody!!.colliding != null){
+                destroy()
+            }
         }
     }
 

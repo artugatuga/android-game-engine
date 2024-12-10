@@ -5,12 +5,13 @@ import androidx.compose.runtime.traceEventEnd
 import com.innoveworkshop.gametest.engine.GameObject
 import com.innoveworkshop.gametest.engine.GameSurface
 import com.innoveworkshop.gametest.engine.Vector
+import org.w3c.dom.Text
 import kotlin.random.Random
 
 class PipesHandler {
     inner class Handler {
         val pipesInGame = true
-        var timeToSpawnAnother = 3f
+        var timeToSpawnAnother = 4f
 
         fun onFixedUpdate(surface: GameSurface, time: Float, dt: Float) : Float{
             var currentTime = time
@@ -54,6 +55,31 @@ class PipesHandler {
             downPipe.ApplyForceToPipe(
                 Vector(300f, 0f)
             )
+
+            CreateRandomizedObstacles(surface, upPipe, spaceBetween)
+        }
+
+        fun CreateRandomizedObstacles(surface: GameSurface, upPipe: Pipe, spaceBetween: Float) {
+            val num = (0..4).random().toFloat()
+            var i = 0
+            while (i < num){
+                val obstacle = BoxObstacle(
+                    Vector(surface.width.toFloat(), upPipe.position.y + upPipe.height/2 + (spaceBetween * (i+1))/(num + 1)),
+                    80f, 80f,
+                    Color.rgb(255, 0, 255),
+                    surface
+                )
+
+                surface.addPipe(obstacle)
+
+                surface.addGameObject(obstacle)
+
+                obstacle.ApplyForceToObstacle(
+                    Vector(300f, 0f)
+                )
+
+                i++
+            }
         }
     }
 }

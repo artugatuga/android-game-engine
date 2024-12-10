@@ -21,7 +21,7 @@ class Pipe(
             collision = false,
             mass = 2f,
             gravity = 0f,
-            airResistence = 1f,
+            airResistence = 0f,
             initialPosition = position,
             initialVelocity = Vector(0f, 0f),
             currentPosition = position,

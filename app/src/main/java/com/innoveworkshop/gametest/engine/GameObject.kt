@@ -7,6 +7,7 @@ abstract class GameObject {
     protected var deltaTime = 1/60f
     protected var lifeTime = 0f
     var id: Int? = null
+    var name: String = "Default Object"
     var physicsBody: PhysicsBody? = null
 
     protected var gameSurface: GameSurface? = null
