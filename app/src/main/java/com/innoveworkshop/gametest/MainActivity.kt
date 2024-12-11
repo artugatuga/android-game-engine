@@ -21,10 +21,12 @@ class MainActivity : AppCompatActivity() {
     protected var gameSurface: GameSurface? = null
     protected var shoot: Button? = null
     var score = 0
+    var scoreText: TextView? = null
 
     protected var game: Game? = null
     protected var projectilesHandler: ProjectilesHandler? = null
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         projectilesHandler = ProjectilesHandler()
         gameSurface!!.setRootGameObject(game)
 
+        scoreText = findViewById<View>(R.id.score_text) as TextView
+        scoreText!!.text = "Score: $score"
         setupControls()
     }
 
@@ -64,9 +68,9 @@ class MainActivity : AppCompatActivity() {
         var player: Player? = null
         var time: Float = 3f
         var score = 0
-        var scoreText: TextView? = null
         @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
         @SuppressLint("SetTextI18n")
+
         override fun onStart(surface: GameSurface?) {
             super.onStart(surface)
             player = Player(
@@ -77,9 +81,9 @@ class MainActivity : AppCompatActivity() {
                 surface
             )
             surface.addGameObject(player!!)
-            scoreText = findViewById<View>(R.id.score_text) as TextView
-            scoreText.text = "Score: $score"
         }
+
+
 
         override fun onFixedUpdate() {
             super.onFixedUpdate()
