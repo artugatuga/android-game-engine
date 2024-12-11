@@ -1,6 +1,9 @@
 package com.innoveworkshop.gametest.assets
 
+import android.annotation.SuppressLint
+import com.innoveworkshop.gametest.MainActivity
 import com.innoveworkshop.gametest.engine.GameSurface
+import com.innoveworkshop.gametest.engine.MagnitudeVector
 import com.innoveworkshop.gametest.engine.Physics
 import com.innoveworkshop.gametest.engine.PhysicsBody
 import com.innoveworkshop.gametest.engine.Rectangle
@@ -13,6 +16,7 @@ class Pipe(
     color: Int,
     val surface: GameSurface
 ) : Rectangle (position, width, height, color) {
+    var scored = false
 
     override fun onStart(surface: GameSurface?) {
         super.onStart(surface)
@@ -46,6 +50,10 @@ class Pipe(
             if(physicsBody!!.maxLifeTime <= physicsBody!!.lifeTime){
                 destroy()
             }
+
+            if(!scored){
+                CheckPlayerPos()
+            }
         }
     }
 
@@ -60,5 +68,18 @@ class Pipe(
         )
 
         physicsBody!!.initialVelocity = tempForce
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun CheckPlayerPos(){
+        val playerPos = surface.gameObjects[0]!!.position
+        var currentScore = MainActivity.Game().score
+
+        if(position.x + width/2 < playerPos.x){
+            currentScore++
+            MainActivity().scoreText!!.text = "Score: $currentScore"
+            MainActivity.Game().score = currentScore
+            scored = true
+        }
     }
 }

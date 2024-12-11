@@ -1,11 +1,13 @@
 package com.innoveworkshop.gametest
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Button
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.innoveworkshop.gametest.assets.PipesHandler
@@ -18,6 +20,7 @@ import com.innoveworkshop.gametest.assets.ProjectilesHandler
 class MainActivity : AppCompatActivity() {
     protected var gameSurface: GameSurface? = null
     protected var shoot: Button? = null
+    var score = 0
 
     protected var game: Game? = null
     protected var projectilesHandler: ProjectilesHandler? = null
@@ -35,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         setupControls()
     }
 
+    @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     private fun setupControls() {
         shoot = findViewById<View>(R.id.shoot_button) as Button
@@ -56,10 +60,13 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    inner class Game : GameObject() {
+    class Game : GameObject() {
         var player: Player? = null
         var time: Float = 3f
-
+        var score = 0
+        var scoreText: TextView? = null
+        @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
+        @SuppressLint("SetTextI18n")
         override fun onStart(surface: GameSurface?) {
             super.onStart(surface)
             player = Player(
@@ -70,6 +77,8 @@ class MainActivity : AppCompatActivity() {
                 surface
             )
             surface.addGameObject(player!!)
+            scoreText = findViewById<View>(R.id.score_text) as TextView
+            scoreText.text = "Score: $score"
         }
 
         override fun onFixedUpdate() {

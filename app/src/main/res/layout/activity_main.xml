@@ -42,13 +42,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="137dp"
-            android:layout_height="143dp"
-            android:text="TextView"
-            tools:layout_editor_absoluteX="37dp"
-            tools:layout_editor_absoluteY="31dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/score_text"
+        android:layout_width="714dp"
+        android:layout_height="1516dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="131dp"
+        android:text="Score:"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/gameSurface"
+        app:layout_constraintTop_toBottomOf="@+id/gameSurface" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
