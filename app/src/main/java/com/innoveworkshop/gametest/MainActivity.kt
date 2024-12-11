@@ -39,8 +39,6 @@ class MainActivity : AppCompatActivity() {
         game = Game()
         projectilesHandler = ProjectilesHandler()
         gameSurface!!.setRootGameObject(game)
-
-        val dataStore = ProjectVotesRepository(context)
         scoreText = findViewById<TextView>(R.id.score_text)
         highestScoreText = findViewById<TextView>(R.id.high_score)
         scoreText!!.text = "Score: $score"
