@@ -12,6 +12,7 @@ class PipesHandler {
     inner class Handler {
         val pipesInGame = true
         var timeToSpawnAnother = 4f
+        var pipesVelocity = 400f
 
         fun onFixedUpdate(surface: GameSurface, time: Float, dt: Float) : Float{
             var currentTime = time
@@ -50,11 +51,12 @@ class PipesHandler {
             surface.addGameObject(downPipe)
 
             upPipe.ApplyForceToPipe(
-                Vector(300f, 0f)
+                Vector(pipesVelocity, 0f)
             )
             downPipe.ApplyForceToPipe(
-                Vector(300f, 0f)
+                Vector(pipesVelocity, 0f)
             )
+            downPipe.scored = true
 
             CreateRandomizedObstacles(surface, upPipe, spaceBetween)
         }
@@ -70,12 +72,10 @@ class PipesHandler {
                     surface
                 )
 
-                surface.addPipe(obstacle)
-
                 surface.addGameObject(obstacle)
 
                 obstacle.ApplyForceToObstacle(
-                    Vector(300f, 0f)
+                    Vector(pipesVelocity, 0f)
                 )
 
                 i++

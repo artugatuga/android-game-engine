@@ -50,10 +50,6 @@ class Pipe(
             if(physicsBody!!.maxLifeTime <= physicsBody!!.lifeTime){
                 destroy()
             }
-
-            if(!scored){
-                CheckPlayerPos()
-            }
         }
     }
 
@@ -71,15 +67,16 @@ class Pipe(
     }
 
     @SuppressLint("SetTextI18n")
-    fun CheckPlayerPos(){
-        val playerPos = surface.gameObjects[0]!!.position
-        var currentScore = MainActivity.Game().score
+    fun CheckPlayerPos(score: Int, playerPos: Vector) : Int{
+        if(!scored && !isDestroyed){
+            var currentScore = score
 
-        if(position.x + width/2 < playerPos.x){
-            currentScore++
-            MainActivity().scoreText!!.text = "Score: $currentScore"
-            MainActivity.Game().score = currentScore
-            scored = true
+            if(position.x + width/2 < playerPos.x){
+                currentScore++
+                scored = true
+                return currentScore
+            }
         }
+        return score
     }
 }

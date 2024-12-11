@@ -16,12 +16,15 @@ import com.innoveworkshop.gametest.engine.GameObject
 import com.innoveworkshop.gametest.engine.GameSurface
 import com.innoveworkshop.gametest.engine.Vector
 import com.innoveworkshop.gametest.assets.ProjectilesHandler
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     protected var gameSurface: GameSurface? = null
     protected var shoot: Button? = null
     var score = 0
+    var highScore = 0
     var scoreText: TextView? = null
+    var highestScoreText: TextView? = null
 
     protected var game: Game? = null
     protected var projectilesHandler: ProjectilesHandler? = null
@@ -37,15 +40,18 @@ class MainActivity : AppCompatActivity() {
         projectilesHandler = ProjectilesHandler()
         gameSurface!!.setRootGameObject(game)
 
-        scoreText = findViewById<View>(R.id.score_text) as TextView
+        val dataStore = ProjectVotesRepository(context)
+        scoreText = findViewById<TextView>(R.id.score_text)
+        highestScoreText = findViewById<TextView>(R.id.high_score)
         scoreText!!.text = "Score: $score"
+        highestScoreText!!.text = "Highest Score: $score"
         setupControls()
     }
 
     @SuppressLint("SetTextI18n")
     @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     private fun setupControls() {
-        shoot = findViewById<View>(R.id.shoot_button) as Button
+        shoot = findViewById<Button>(R.id.shoot_button)
 
         shoot!!.setOnClickListener {
             projectilesHandler!!.InitialPos.value = game!!.player!!.position
@@ -64,12 +70,9 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    class Game : GameObject() {
+    inner class Game : GameObject() {
         var player: Player? = null
         var time: Float = 3f
-        var score = 0
-        @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-        @SuppressLint("SetTextI18n")
 
         override fun onStart(surface: GameSurface?) {
             super.onStart(surface)
@@ -83,11 +86,45 @@ class MainActivity : AppCompatActivity() {
             surface.addGameObject(player!!)
         }
 
-
-
+        @SuppressLint("SetTextI18n")
         override fun onFixedUpdate() {
             super.onFixedUpdate()
             time = PipesHandler().Handler().onFixedUpdate(gameSurface!!, time, deltaTime)
+
+            if(!player!!.isDestroyed){
+                var i = 0
+                while (i < gameSurface!!.pipesInGame.size){
+                    score = gameSurface!!.pipesInGame[i]!!.CheckPlayerPos(score, player!!.position)
+                    scoreText!!.text = "Score: $score"
+                    i++
+                }
+            }else{
+                RestartGame()
+            }
+        }
+
+        fun RestartGame(){
+            player!!.Reset()
+            time = 3f
+            SaveGame()
+            var i = 1
+            while (i < gameSurface!!.gameObjects.size){
+                if(gameSurface!!.gameObjects[i] != null){
+                    gameSurface!!.gameObjects[i]!!.destroy()
+                    gameSurface!!.gameObjects[i]!!.isDestroyed = true
+                }
+                i++
+            }
+        }
+
+        @SuppressLint("SetTextI18n")
+        fun SaveGame(){
+            if(highScore < score){
+                highestScoreText!!.text = "Highest Score: $score"
+                highScore = score
+            }
+            score = 0
+            scoreText!!.text = "Score: $score"
         }
     }
 }

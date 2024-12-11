@@ -106,7 +106,7 @@ class Physics {
     fun CollisionDetection(
         physicsBody: PhysicsBody,
     ) : PhysicsBody{
-        if(physicsBody.timeFromForceAplied > deltaTime * 2){
+        if(physicsBody.timeFromForceAplied > deltaTime * 3){
             if (physicsBody.collision && physicsBody.surface!!.gameObjects[physicsBody.id] != null){
                 return Touching(physicsBody)
             }
@@ -116,44 +116,6 @@ class Physics {
 
     fun Touching(physicsBody: PhysicsBody) : PhysicsBody{
         var i = 0
-//        while (i < physicsBody.surface!!.pipesInGame.size){
-//            if(physicsBody != physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!){
-//                var touching: Boolean
-//
-//                if(physicsBody.objectTypeCir != null){
-//                    touching = circleRectangleColision(physicsBody.objectTypeCir!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
-//                }else{
-//                    touching = rectangleRectangleColision(physicsBody.objectTypeRec!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
-//                }
-//
-//                if (touching){
-//                    val side: Int
-//
-//                    if(physicsBody.objectTypeCir != null){
-//                        side = colisionSideCirRec(physicsBody.objectTypeCir!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
-//                    }else{
-//                        side = colisionSideRec(physicsBody.objectTypeRec!!, physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!.objectTypeRec!!)
-//                    }
-//
-//                    if (side == 1){ //tops
-//                        physicsBody.initialVelocity.y = -physicsBody.currentVelocity.y
-//                        physicsBody.initialPosition = physicsBody.currentPosition
-//                        physicsBody.timeFromForceAplied = 0f
-//                    }else{
-//                        physicsBody.initialVelocity.x = -physicsBody.currentVelocity.x
-//                        physicsBody.initialPosition = physicsBody.currentPosition
-//                        physicsBody.timeFromForceAplied = 0f
-//                    }
-//                    physicsBody.colliding = physicsBody.surface!!.pipesInGame[i]!!.physicsBody!!
-//
-//                    return physicsBody
-//                }else{
-//                    physicsBody.colliding = null
-//                }
-//            }
-//
-//            i++
-//        }
 
         while (i < physicsBody.surface!!.gameObjects.size){
             if(physicsBody.surface!!.gameObjects[i] != null){

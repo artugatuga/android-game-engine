@@ -16,7 +16,7 @@ class ProjectilesHandler {
     inner class Handler : GameObject() {
         fun CreateProjectile(surface: GameSurface){
             val projectile = Projectile(
-                Vector(InitialPos.value.x + offSet, InitialPos.value.y - offSet),
+                Vector(InitialPos.value.x + offSet, InitialPos.value.y),
                 10f,
                 Color.rgb(128, 14, 80),
                 surface

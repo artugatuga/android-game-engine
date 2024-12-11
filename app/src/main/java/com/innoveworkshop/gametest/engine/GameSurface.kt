@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.annotation.RequiresApi
+import com.innoveworkshop.gametest.assets.Pipe
 import java.util.Timer
 import java.util.TimerTask
 
@@ -20,7 +21,7 @@ class GameSurface @JvmOverloads constructor(
 
     // Create the GameObject list.
     var gameObjects = ArrayList<GameObject?>()
-    var pipesInGame = ArrayList<GameObject?>()
+    var pipesInGame = ArrayList<Pipe?>()
 
     init {
         // Ensure we are on top of everything.
@@ -59,7 +60,7 @@ class GameSurface @JvmOverloads constructor(
         this.root = root
     }
 
-    fun addPipe(gameObject: GameObject){
+    fun addPipe(gameObject: Pipe){
         pipesInGame.add(gameObject)
     }
 
