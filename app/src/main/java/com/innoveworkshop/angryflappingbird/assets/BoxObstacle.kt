@@ -1,53 +1,54 @@
-package com.innoveworkshop.gametest.assets
+package com.innoveworkshop.angryflappingbird.assets
 
-import com.innoveworkshop.gametest.engine.Circle
-import com.innoveworkshop.gametest.engine.GameSurface
-import com.innoveworkshop.gametest.engine.Vector
-import com.innoveworkshop.gametest.engine.Physics
-import com.innoveworkshop.gametest.engine.PhysicsBody
+import com.innoveworkshop.angryflappingbird.engine.GameSurface
+import com.innoveworkshop.angryflappingbird.engine.Vector
+import com.innoveworkshop.angryflappingbird.engine.Physics
+import com.innoveworkshop.angryflappingbird.engine.PhysicsBody
+import com.innoveworkshop.angryflappingbird.engine.Rectangle
 
-class Projectile(
+class BoxObstacle(
     position: Vector?,
-    radius: Float,
+    width: Float,
+    height: Float,
     color: Int,
     val surface: GameSurface
-) : Circle (position, radius, color) {
+) : Rectangle(position, width, height, color) {
 
     override fun onStart(surface: GameSurface?) {
         super.onStart(surface)
+        name = "Obstacle"
         physicsBody = PhysicsBody(
             id = id!!,
             collision = true,
             mass = 2f,
-            gravity = 2f,
-            airResistence = 150f,
-            initialPosition = Vector(0f, 0f),
+            gravity = 0f,
+            airResistence = 0f,
+            initialPosition = position,
             initialVelocity = Vector(0f, 0f),
-            currentPosition = Vector(0f, 0f),
+            currentPosition = position,
             currentVelocity = Vector(0f, 0f),
-            maxLifeTime = 10,
+            maxLifeTime = 8,
             surface = this.surface,
-            objectTypeCir = this
+            objectTypeRec = this
         )
     }
 
     override fun onFixedUpdate() {
         super.onFixedUpdate()
 
-        if(!isDestroyed && physicsBody != null){
+        if (!isDestroyed) {
             physicsBody = Physics().UpdatePhysicsBody(
                 physicsBody = physicsBody!!
             )
-
             position = physicsBody!!.currentPosition
 
-            if(physicsBody!!.maxLifeTime <= physicsBody!!.lifeTime){
+            if(physicsBody!!.colliding != null){
                 destroy()
             }
         }
     }
 
-    fun ApplyForceToProjectile(
+    fun ApplyForceToObstacle(
         force: Vector
     ){
         physicsBody!!.initialPosition = position
@@ -59,4 +60,5 @@ class Projectile(
 
         physicsBody!!.initialVelocity = tempForce
     }
+
 }

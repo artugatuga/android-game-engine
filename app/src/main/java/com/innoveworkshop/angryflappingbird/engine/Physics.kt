@@ -1,12 +1,7 @@
-package com.innoveworkshop.gametest.engine
+package com.innoveworkshop.angryflappingbird.engine
 
-import androidx.compose.runtime.currentComposer
-import androidx.core.view.ContentInfoCompat.Flags
-import kotlin.math.atan
 import kotlin.math.min
-import kotlin.math.pow
 import kotlin.math.sqrt
-import kotlin.math.tan
 
 class PhysicsBody(
     @JvmField var id: Int,

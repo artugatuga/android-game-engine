@@ -1,12 +1,12 @@
-package com.innoveworkshop.gametest.assets
+package com.innoveworkshop.angryflappingbird.assets
 
 import android.graphics.Color
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
-import com.innoveworkshop.gametest.engine.GameObject
-import com.innoveworkshop.gametest.engine.GameSurface
-import com.innoveworkshop.gametest.engine.Vector
+import com.innoveworkshop.angryflappingbird.engine.GameObject
+import com.innoveworkshop.angryflappingbird.engine.GameSurface
+import com.innoveworkshop.angryflappingbird.engine.Vector
 
 @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
 class ProjectilesHandler {

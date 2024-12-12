@@ -1,4 +1,4 @@
-package com.innoveworkshop.gametest.engine
+package com.innoveworkshop.angryflappingbird.engine
 
 import android.content.res.Resources
 import android.graphics.Bitmap

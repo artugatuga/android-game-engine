@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.innoveworkshop.gametest.engine.GameSurface
+    <com.innoveworkshop.angryflappingbird.engine.GameSurface
         android:id="@+id/gameSurface"
         android:layout_width="0dp"
         android:layout_height="0dp"

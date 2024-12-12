@@ -1,12 +1,8 @@
-package com.innoveworkshop.gametest.assets
+package com.innoveworkshop.angryflappingbird.assets
 
 import android.graphics.Color
-import androidx.compose.runtime.traceEventEnd
-import com.innoveworkshop.gametest.engine.GameObject
-import com.innoveworkshop.gametest.engine.GameSurface
-import com.innoveworkshop.gametest.engine.Vector
-import org.w3c.dom.Text
-import kotlin.random.Random
+import com.innoveworkshop.angryflappingbird.engine.GameSurface
+import com.innoveworkshop.angryflappingbird.engine.Vector
 
 class PipesHandler {
     inner class Handler {

@@ -13,5 +13,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "GameTest"
+rootProject.name = "Angry Flapping Bird"
 include(":app")

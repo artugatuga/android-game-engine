@@ -1,10 +1,10 @@
-package com.innoveworkshop.gametest.assets
+package com.innoveworkshop.angryflappingbird.assets
 
-import com.innoveworkshop.gametest.engine.GameSurface
-import com.innoveworkshop.gametest.engine.Rectangle
-import com.innoveworkshop.gametest.engine.Vector
-import com.innoveworkshop.gametest.engine.Physics
-import com.innoveworkshop.gametest.engine.PhysicsBody
+import com.innoveworkshop.angryflappingbird.engine.GameSurface
+import com.innoveworkshop.angryflappingbird.engine.Rectangle
+import com.innoveworkshop.angryflappingbird.engine.Vector
+import com.innoveworkshop.angryflappingbird.engine.Physics
+import com.innoveworkshop.angryflappingbird.engine.PhysicsBody
 
 class Player(
     position: Vector?,

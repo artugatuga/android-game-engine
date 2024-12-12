@@ -1,13 +1,11 @@
-package com.innoveworkshop.gametest.assets
+package com.innoveworkshop.angryflappingbird.assets
 
 import android.annotation.SuppressLint
-import com.innoveworkshop.gametest.MainActivity
-import com.innoveworkshop.gametest.engine.GameSurface
-import com.innoveworkshop.gametest.engine.MagnitudeVector
-import com.innoveworkshop.gametest.engine.Physics
-import com.innoveworkshop.gametest.engine.PhysicsBody
-import com.innoveworkshop.gametest.engine.Rectangle
-import com.innoveworkshop.gametest.engine.Vector
+import com.innoveworkshop.angryflappingbird.engine.GameSurface
+import com.innoveworkshop.angryflappingbird.engine.Physics
+import com.innoveworkshop.angryflappingbird.engine.PhysicsBody
+import com.innoveworkshop.angryflappingbird.engine.Rectangle
+import com.innoveworkshop.angryflappingbird.engine.Vector
 
 class Pipe(
     position: Vector?,

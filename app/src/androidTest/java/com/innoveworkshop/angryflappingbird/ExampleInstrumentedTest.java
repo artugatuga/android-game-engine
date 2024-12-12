@@ -1,4 +1,4 @@
-package com.innoveworkshop.gametest;
+package com.innoveworkshop.angryflappingbird;
 
 import android.content.Context;
 

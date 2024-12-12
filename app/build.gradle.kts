@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.innoveworkshop.gametest"
+    namespace = "com.innoveworkshop.angryflappingbird"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.innoveworkshop.gametest"
+        applicationId = "com.innoveworkshop.angryflappingbird"
         minSdk = 28
         targetSdk = 34
         versionCode = 1

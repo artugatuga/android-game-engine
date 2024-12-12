@@ -1,4 +1,4 @@
-package com.innoveworkshop.gametest.data
+package com.innoveworkshop.angryflappingbird.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore

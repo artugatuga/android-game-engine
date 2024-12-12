@@ -1,4 +1,4 @@
-package com.innoveworkshop.gametest
+package com.innoveworkshop.angryflappingbird
 
 import android.annotation.SuppressLint
 import android.graphics.Color
@@ -10,13 +10,12 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import com.innoveworkshop.gametest.assets.PipesHandler
-import com.innoveworkshop.gametest.assets.Player
-import com.innoveworkshop.gametest.engine.GameObject
-import com.innoveworkshop.gametest.engine.GameSurface
-import com.innoveworkshop.gametest.engine.Vector
-import com.innoveworkshop.gametest.assets.ProjectilesHandler
-import kotlinx.coroutines.launch
+import com.innoveworkshop.angryflappingbird.assets.PipesHandler
+import com.innoveworkshop.angryflappingbird.assets.Player
+import com.innoveworkshop.angryflappingbird.engine.GameObject
+import com.innoveworkshop.angryflappingbird.engine.GameSurface
+import com.innoveworkshop.angryflappingbird.engine.Vector
+import com.innoveworkshop.angryflappingbird.assets.ProjectilesHandler
 
 class MainActivity : AppCompatActivity() {
     protected var gameSurface: GameSurface? = null
